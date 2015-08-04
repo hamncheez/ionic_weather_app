@@ -32,9 +32,13 @@ angular.module('starter.controllers', [])
 
 
   // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
+  $scope.closeModal = function() {
     $scope.modal.hide();
+    if($scope.addLocationModal){
+      $scope.addLocationModal.hide();
+    }
   };
+
 
   // Open the login modal
   $scope.login = function() {
@@ -66,6 +70,11 @@ angular.module('starter.controllers', [])
 
 
 })
+.controller('GetLocationCtrl', function($scope){
+
+
+})
+
 
 .controller('forecastViewCtrl', function($scope){
   $scope.locations = [
