@@ -1,4 +1,4 @@
-<ion-modal-view>
+<ion-modal-view ng-controller="GetLocationCtrl">
 	<ion-header-bar>
 	  <h1 class="title">Add Location</h1>
 	  <div class="buttons">
@@ -9,12 +9,21 @@
 		<form ng-submit="">
 			<label for="zip" class="item item-input">
 				<span class="input-label">Zip:</span>
-				<input type="text" ng-model="" name="zip">
+				<input type="text" ng-model="searchInfo.zip" name="zip">
 			</label>
+			
+				
+				<div class="card">
+					<div class="item item-text-wrap" >
+						{{locationInfo.city.name}}
+					</div>
+				</div>
+
 			<label class="item">
 				<button class="button button-block button-positive" type="submit">Add this Location</button>
 			</label>
 		</form>
+		<p class="muted">{{searchInfo.zip}}</p>
 	</ion-content>
 
 </ion-modal-view>

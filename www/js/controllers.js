@@ -70,9 +70,30 @@ angular.module('starter.controllers', [])
 
 
 })
-.controller('GetLocationCtrl', function($scope){
+.controller('GetLocationCtrl', function($scope, $http){
+  $scope.locationInfo = {};
+  $scope.searchInfo = {};
+
+  var owmUrl = "http://api.openweathermap.org/data/2.5/forecast";
+  //var zip = $scope.searchInfo.zip;
+
+  $scope.$watch('$scope.searchInfo', function(newInfo){
+
+    $http.get(owmUrl,{params:{'zip': newInfo.zip}})
+    .success(function(data){
+      $scope.locationInfo = data; 
+      alert('zip has changed to ' + newInfo.zip);
+    });
 
 
+  });
+
+
+/*  $http.get(owmUrl,{params:{'zip': $scope.searchInfo.zip}})
+  .success(function(data){
+    $scope.locationInfo = data; 
+  });
+*/
 })
 
 
@@ -82,7 +103,7 @@ angular.module('starter.controllers', [])
     { id:2, zip:'91775' },
     { id:3, zip:'84606' }
 
-  ]
+  ];
 
 })
 
