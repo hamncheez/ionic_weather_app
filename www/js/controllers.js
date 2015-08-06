@@ -72,21 +72,21 @@ angular.module('starter.controllers', [])
 })
 .controller('GetLocationCtrl', function($scope, $http){
   $scope.locationInfo = {};
-  $scope.searchInfo = {};
-
-  var owmUrl = "http://api.openweathermap.org/data/2.5/forecast";
-  //var zip = $scope.searchInfo.zip;
-
-  $scope.$watch('$scope.searchInfo', function(newInfo){
-
-    $http.get(owmUrl,{params:{'zip': newInfo.zip}})
-    .success(function(data){
-      $scope.locationInfo = data; 
-      alert('zip has changed to ' + newInfo.zip);
-    });
+  $scope.searchInfo = {zip:'91775'};
 
 
-  });
+
+  $scope.findZip = function(){
+    var owmUrl = "http://api.openweathermap.org/data/2.5/forecast";
+    $http({
+      method:'GET',
+      url: owmUrl,
+      params: {zip:$scope.searchInfo.zip}
+    }).then(function(data){
+      $scope.locationInfo = data;
+    }, function(){});
+
+  };
 
 
 /*  $http.get(owmUrl,{params:{'zip': $scope.searchInfo.zip}})
