@@ -72,7 +72,7 @@ angular.module('starter.controllers', [])
 })
 .controller('GetLocationCtrl', function($scope, $http){
   $scope.locationInfo = {};
-  $scope.searchInfo = {zip:'91775'};
+  $scope.searchInfo = {};
 
 
 
@@ -82,9 +82,11 @@ angular.module('starter.controllers', [])
       method:'GET',
       url: owmUrl,
       params: {zip:$scope.searchInfo.zip}
-    }).then(function(data){
-      $scope.locationInfo = data;
-    }, function(){});
+    }).then(function(response){
+      $scope.locationInfo = response.data;
+    }, function(){
+      alert('no go');
+    });
 
   };
 

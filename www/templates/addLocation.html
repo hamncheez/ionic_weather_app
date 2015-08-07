@@ -6,10 +6,10 @@
 	  </div>
 	</ion-header-bar>
 	<ion-content has-subheader="false">
-		<form ng-submit="findZip()">
+		<form name="form" ng-submit="findZip()">
 			<label for="zip" class="item item-input">
 				<span class="input-label">Zip:</span>
-				<input type="text" ng-model="searchInfo.zip" name="zip">
+				<input type="text" name="zip" pattern="[0-9]*" ng-model="searchInfo.zip" ng-pattern="/^(\d{5}-\d{4}|\d{5})$/" placeholder="example: 90210">
 			</label>
 			
 				
@@ -20,10 +20,15 @@
 				</div>
 
 			<label class="item">
-				<button class="button button-block button-positive" type="submit">Add this Location</button>
+				<button class="button button-block button-positive" type="submit" ng-hide="form.zip.$error.pattern">Add this Location</button>
 			</label>
 		</form>
 		<p class="muted">{{searchInfo.zip}}</p>
 	</ion-content>
-
+<style>
+	
+	.ng-pristine .button{
+		display:none;
+	}
+</style>
 </ion-modal-view>
