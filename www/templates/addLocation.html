@@ -9,24 +9,29 @@
 		<form name="form" ng-submit="findZip()">
 			<label for="zip" class="item item-input">
 				<span class="input-label">Zip:</span>
-				<input type="text" name="zip" pattern="[0-9]*" ng-model="searchInfo.zip" ng-pattern="/^(\d{5}-\d{4}|\d{5})$/" placeholder="example: 90210">
+				<input type="text" name="zip" pattern="[0-9]*" ng-model="searchInfo.zip" ng-pattern="/^(\d{5}-\d{4}|\d{5})$/" placeholder="example: 90210" >
 			</label>
 			
 				
-				<div class="card">
-					<div class="item item-text-wrap" >
-						{{locationInfo.city.name}}
+				<div class="row row-center" ng-show="searchResponse">
+					<div class="col" ng-class="{assertive: errorColor}">
+						{{searchResponse}}
+					</div>
+					<div class="col" ng-hide="errorColor">
+						<button class="button button-positive">Save</button>
+					</div>
+					<div class="col" ng-hide="errorColor">
+						<button class="button button-calm">Just look</button>
 					</div>
 				</div>
 
 			<label class="item">
-				<button class="button button-block button-positive" type="submit" ng-hide="form.zip.$error.pattern">Add this Location</button>
+				<button class="button button-block button-positive" type="submit" ng-hide="form.zip.$error.pattern || searchResponse">Lookup Zip Code</button>
 			</label>
 		</form>
-		<p class="muted">{{searchInfo.zip}}</p>
+		<p class="muted">error code: {{locationInfo.cod}}</p>
 	</ion-content>
 <style>
-	
 	.ng-pristine .button{
 		display:none;
 	}

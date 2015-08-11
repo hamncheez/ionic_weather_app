@@ -74,21 +74,50 @@ angular.module('starter.controllers', [])
   $scope.locationInfo = {};
   $scope.searchInfo = {};
 
+  var reset = function(){
+    if($scope.locationInfo){
+      $scope.locationInfo = null;
+    } 
+  };
+
 
 
   $scope.findZip = function(){
     var owmUrl = "http://api.openweathermap.org/data/2.5/forecast";
+
     $http({
       method:'GET',
       url: owmUrl,
       params: {zip:$scope.searchInfo.zip}
     }).then(function(response){
       $scope.locationInfo = response.data;
+      if($scope.locationInfo.cod == "404"){
+        $scope.searchResponse = "Can't find that zip code!";
+        $scope.errorColor = true;
+      }
+      else if ($scope.locationInfo.cod = "200"){
+        $scope.searchResponse = $scope.locationInfo.city.name;
+        $scope.errorColor = false;
+
+        var workaround = 1;
+        $scope.$watch('searchInfo.zip', function(){
+          workaround --;
+          if(workaround < 0){
+            console.log('hellow');
+            reset();
+          }
+        });
+
+      }
+      /*else if ($scope.locationInfo.cod == "200"){
+        alert('works!');
+      }*/
     }, function(){
       alert('no go');
     });
 
   };
+
 
 
 /*  $http.get(owmUrl,{params:{'zip': $scope.searchInfo.zip}})
