@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('weather.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 
@@ -70,17 +70,19 @@ angular.module('starter.controllers', [])
 
 
 })
-.controller('GetLocationCtrl', function($scope, $http){
+
+
+.controller('GetLocationCtrl', function($scope, $http, $state){
   $scope.locationInfo = {};
   $scope.searchInfo = {};
 
   var reset = function(){
     if($scope.locationInfo){
       $scope.locationInfo = null;
+            console.log($scope.locationInfo);
+
     } 
   };
-
-
 
   $scope.findZip = function(){
     var owmUrl = "http://api.openweathermap.org/data/2.5/forecast";
@@ -92,18 +94,16 @@ angular.module('starter.controllers', [])
     }).then(function(response){
       $scope.locationInfo = response.data;
       if($scope.locationInfo.cod == "404"){
-        $scope.searchResponse = "Can't find that zip code!";
-        $scope.errorColor = true;
+        $scope.error = "Can't find that zip code!";
+        console.log($scope.error);
       }
       else if ($scope.locationInfo.cod = "200"){
-        $scope.searchResponse = $scope.locationInfo.city.name;
-        $scope.errorColor = false;
+        $scope.error = false;
 
         var workaround = 1;
         $scope.$watch('searchInfo.zip', function(){
           workaround --;
           if(workaround < 0){
-            console.log('hellow');
             reset();
           }
         });
@@ -118,7 +118,10 @@ angular.module('starter.controllers', [])
 
   };
 
-
+  $scope.goToLocation = function(){
+    $state.go('app.browse');
+    console.log('test')
+  }
 
 /*  $http.get(owmUrl,{params:{'zip': $scope.searchInfo.zip}})
   .success(function(data){

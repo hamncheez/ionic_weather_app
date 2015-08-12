@@ -10,23 +10,22 @@
 			<label for="zip" class="item item-input">
 				<span class="input-label">Zip:</span>
 				<input type="text" name="zip" pattern="[0-9]*" ng-model="searchInfo.zip" ng-pattern="/^(\d{5}-\d{4}|\d{5})$/" placeholder="example: 90210" >
-			</label>
-			
-				
-				<div class="row row-center" ng-show="searchResponse">
-					<div class="col" ng-class="{assertive: errorColor}">
-						{{searchResponse}}
+			</label>		
+				<div class="row row-center" ng-show="locationInfo.city.name || error">
+					<div class="col" ng-class="{assertive: error}">
+						{{locationInfo.city.name}}
+						<p ng-show="error">{{error}}</p>
 					</div>
-					<div class="col" ng-hide="errorColor">
-						<button class="button button-positive">Save</button>
+					<div class="col" ng-hide="error">
+						<button class="button button-positive" type="submit" >Save</button>
 					</div>
-					<div class="col" ng-hide="errorColor">
-						<button class="button button-calm">Just look</button>
+					<div class="col" ng-hide="error">
+						<button class="button button-calm" type="submit" ng-click="goToLocation()">Just look</button>
 					</div>
 				</div>
 
 			<label class="item">
-				<button class="button button-block button-positive" type="submit" ng-hide="form.zip.$error.pattern || searchResponse">Lookup Zip Code</button>
+				<button class="button button-block button-positive" type="submit" ng-hide="form.zip.$error.pattern || locationInfo.city.name">Lookup Zip Code</button>
 			</label>
 		</form>
 		<p class="muted">error code: {{locationInfo.cod}}</p>
