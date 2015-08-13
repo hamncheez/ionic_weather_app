@@ -4,194 +4,37 @@
 		"selected_items":
 		[
 			[
-				"ph",
-				"phone"
+				"$loca",
+				"$location	AngularJS"
 			],
 			[
-				"min",
-				"min-height"
+				"loc",
+				"locationInfo"
 			],
 			[
-				"set",
-				"setTemplate"
+				"cons",
+				"console"
 			],
 			[
-				"font",
-				"font-family"
+				"new",
+				"newInfo"
 			],
 			[
-				"mar",
-				"margin"
-			],
-			[
-				"padd",
-				"padding"
-			],
-			[
-				"backg",
-				"background-position"
-			],
-			[
-				"bac",
-				"background"
-			],
-			[
-				"pad",
-				"padding"
-			],
-			[
-				"back",
-				"background"
-			],
-			[
-				"i",
-				"italic"
-			],
-			[
-				"fl",
-				"float"
-			],
-			[
-				"r",
-				"rgba()"
-			],
-			[
-				"z",
-				"z-index"
-			],
-			[
-				"margin",
-				"margin-bottom"
-			],
-			[
-				"max",
-				"max-width"
-			],
-			[
-				"border-r",
-				"border-radius"
-			],
-			[
-				"cate",
-				"categories"
-			],
-			[
-				"cat",
-				"category"
-			],
-			[
-				"print",
-				"print_r"
-			],
-			[
-				"op",
-				"opacity"
-			],
-			[
-				"padding",
-				"padding-top"
-			],
-			[
-				"rea",
-				"repeat-x"
-			],
-			[
-				"text",
-				"text-align"
-			],
-			[
-				"border",
-				"border-radius"
-			],
-			[
-				"h",
-				"height"
-			],
-			[
-				"product",
-				"productid"
-			],
-			[
-				"comp",
-				"components"
-			],
-			[
-				"v",
-				"visibility"
-			],
-			[
-				"max-",
-				"max-width"
-			],
-			[
-				"pos",
-				"position"
-			],
-			[
-				"ba",
-				"background"
-			],
-			[
-				"border-ra",
-				"border-radius"
-			],
-			[
-				"tex",
-				"text-align"
-			],
-			[
-				"background-c",
-				"background-color"
-			],
-			[
-				"font-s",
-				"font-size"
-			],
-			[
-				"err",
-				"errorResponse"
-			],
-			[
-				"store",
-				"storePhone"
-			],
-			[
-				"border-radu",
-				"border-top-left-radius"
-			],
-			[
-				"border-c",
-				"border-color"
-			],
-			[
-				"list-sty",
-				"list-style-type"
-			],
-			[
-				"inle",
-				"inline-block"
-			],
-			[
-				"inline",
-				"inline-block"
+				"ion",
+				"ion-card	ion-card"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "www/templates/addLocation.html",
-			"settings":
-			{
-				"buffer_size": 807,
-				"line_ending": "Windows"
-			}
-		},
-		{
+			"contents": "angular.module('weather.controllers', [])\n\n.controller('AppCtrl', function($scope, $ionicModal, $timeout) {\n\n  // With the new view caching in Ionic, Controllers are only called\n  // when they are recreated or on app start, instead of every page change.\n  // To listen for when this page is active (for example, to refresh data),\n  // listen for the $ionicView.enter event:\n  //$scope.$on('$ionicView.enter', function(e) {\n  //});\n\n  // Form data for the login modal\n  $scope.loginData = {};\n\n  // Create the login modal that we will use later\n  $ionicModal.fromTemplateUrl('templates/login.html', {\n    id: '1',\n    scope: $scope,\n    animation: 'slide-in-up'\n  }).then(function(modal) {\n    $scope.modal = modal;\n  });\n\n  //addLocation modal\n  $ionicModal.fromTemplateUrl('templates/addLocation.html', {\n    id: '0',\n    scope: $scope,\n    animation: 'slide-in-up'\n  }).then(function(modal){\n    $scope.addLocationModal = modal;\n  });\n\n\n  // Triggered in the login modal to close it\n  $scope.closeModal = function() {\n    $scope.modal.hide();\n    if($scope.addLocationModal){\n      $scope.addLocationModal.hide();\n    }\n  };\n\n\n  // Open the login modal\n  $scope.login = function() {\n    $scope.modal.show();\n  };\n\n  //open any modal by id\n /* $scope.openModal = function(index){\n    if(index == 1) $scope.modal.show();\n    else $scope.addLocationModal.show();\n\n  };*/\n\n  $scope.addLocation = function(){\n      $scope.addLocationModal.show();\n  };\n\n  // Perform the login action when the user submits the login form\n  $scope.doLogin = function() {\n    console.log('Doing login', $scope.loginData);\n\n    // Simulate a login delay. Remove this and replace with your login\n    // code if using a login system\n    $timeout(function() {\n      $scope.closeLogin();\n    }, 1000);\n  };\n\n\n\n})\n\n\n.controller('GetLocationCtrl', function($scope, $http, $state){\n  $scope.locationInfo = {};\n  $scope.searchInfo = {};\n\n  var reset = function(){\n    if($scope.locationInfo){\n      $scope.locationInfo = null;\n            console.log($scope.locationInfo);\n\n    } \n  };\n\n  $scope.findZip = function(){\n    var owmUrl = \"http://api.openweathermap.org/data/2.5/forecast\";\n\n    $http({\n      method:'GET',\n      url: owmUrl,\n      params: {zip:$scope.searchInfo.zip}\n    }).then(function(response){\n      $scope.locationInfo = response.data;\n      if($scope.locationInfo.cod == \"404\"){\n        $scope.error = \"Can't find that zip code!\";\n        console.log($scope.error);\n      }\n      else if ($scope.locationInfo.cod = \"200\"){\n        $scope.error = false;\n\n        var workaround = 1;\n        $scope.$watch('searchInfo.zip', function(){\n          workaround --;\n          if(workaround < 0){\n            reset();\n          }\n        });\n\n      }\n      /*else if ($scope.locationInfo.cod == \"200\"){\n        alert('works!');\n      }*/\n    }, function(){\n      alert('no go');\n    });\n\n  };\n\n  $scope.goToLocation = function(){\n    $state.go('app.browse');\n    \n  }\n\n/*  $http.get(owmUrl,{params:{'zip': $scope.searchInfo.zip}})\n  .success(function(data){\n    $scope.locationInfo = data; \n  });\n*/\n})\n\n\n.controller('forecastViewCtrl', function($scope){\n  $scope.locations = [\n    { id:1, zip:'84663' },\n    { id:2, zip:'91775' },\n    { id:3, zip:'84606' }\n\n  ];\n\n})\n\n\n.controller('PlaylistsCtrl', function($scope) {\n  $scope.playlists = [\n    { title: 'Reggae', id: 1 },\n    { title: 'Chill', id: 2 },\n    { title: 'Dubstep', id: 3 },\n    { title: 'Indie', id: 4 },\n    { title: 'Rap', id: 5 },\n    { title: 'Cowbell', id: 6 }\n  ];\n})\n\n.controller('PlaylistCtrl', function($scope, $stateParams) {\n});\n",
 			"file": "www/js/controllers.js",
+			"file_size": 3759,
+			"file_write_time": 130838275674620415,
 			"settings":
 			{
-				"buffer_size": 2875,
+				"buffer_size": 3583,
 				"line_ending": "Windows"
 			}
 		},
@@ -199,8 +42,56 @@
 			"file": "www/js/app.js",
 			"settings":
 			{
-				"buffer_size": 2123,
-				"line_ending": "Unix"
+				"buffer_size": 2132,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "www/index.html",
+			"settings":
+			{
+				"buffer_size": 928,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "www/templates/playlist.html",
+			"settings":
+			{
+				"buffer_size": 100,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "www/templates/playlists.html",
+			"settings":
+			{
+				"buffer_size": 245,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "www/templates/menu.html",
+			"settings":
+			{
+				"buffer_size": 1164,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "www/templates/addLocation.html",
+			"settings":
+			{
+				"buffer_size": 1415,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "www/templates/browse.html",
+			"settings":
+			{
+				"buffer_size": 96,
+				"line_ending": "Windows"
 			}
 		}
 	],
@@ -211,77 +102,23 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 150.0,
+		"height": 81.0,
 		"last_filter": "install",
 		"selected_items":
 		[
 			[
 				"install",
 				"Package Control: Install Package"
-			],
-			[
-				"html",
-				"HTMLBeautify"
-			],
-			[
-				"install p",
-				"Package Control: Install Package"
-			],
-			[
-				"package install",
-				"Package Control: Install Package"
-			],
-			[
-				"pack",
-				"Preferences: Browse Packages"
-			],
-			[
-				"install pa",
-				"Package Control: Install Package"
-			],
-			[
-				"diff",
-				"FileDiffs: Menu"
-			],
-			[
-				"file di",
-				"FileDiffs: Menu"
-			],
-			[
-				"instal",
-				"Package Control: Install Package"
-			],
-			[
-				"package",
-				"Preferences: Package Control Settings – Default"
-			],
-			[
-				"emmet",
-				"Set Syntax: Emmet"
-			],
-			[
-				"intsall",
-				"Package Control: Install Package"
-			],
-			[
-				"",
-				"Package Control: List Packages"
-			],
-			[
-				"package conrol",
-				"Package Control: Install Package"
 			]
 		],
-		"width": 416.0
+		"width": 512.0
 	},
 	"console":
 	{
-		"height": 373.0,
+		"height": 126.0,
 		"history":
 		[
-			"import urllib.request,os,sys; exec(\"if sys.version_info < (3,) or os.name != 'nt': raise OSError('This code is for Windows ST3 only!')\"); pr='Preferences.sublime-settings'; ip='ignored_packages'; n='Package Control'; s=sublime.load_settings(pr); ig=s.get(ip); ig.append(n); s.set(ip,ig); sublime.save_settings('Preferences.sublime-settings'); pf=n+'.sublime-package'; urllib.request.install_opener(urllib.request.build_opener(urllib.request.ProxyHandler())); by=urllib.request.urlopen('https://packagecontrol.io/'+pf.replace(' ','%20')).read(); open(os.path.join(sublime.installed_packages_path(),pf),'wb').write(by); ig.remove(n); s.set(ip,ig); sublime.save_settings(pr); print('Package Control: 3.0.0 upgrade successful!')",
-			"import",
-			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
 		]
 	},
 	"distraction_free":
@@ -295,177 +132,34 @@
 	},
 	"expanded_folders":
 	[
-		"/C/Users/Ivan/www/weather/weather",
-		"/C/Users/Ivan/www/weather/weather/www",
-		"/C/Users/Ivan/www/weather/weather/www/js",
-		"/C/Users/Ivan/www/weather/weather/www/templates"
+		"/C/Users/user/ionic/weather",
+		"/C/Users/user/ionic/weather/hooks",
+		"/C/Users/user/ionic/weather/www",
+		"/C/Users/user/ionic/weather/www/js",
+		"/C/Users/user/ionic/weather/www/templates"
 	],
 	"file_history":
 	[
-		"/C/xampp/htdocs/www/fsd1.9/skin/frontend/hb/default/styles.css",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/catalog/product/featured-product-horizontal.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/checkout/success.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/layout/local.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/catalog/product/view.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/hb/default/template/page/html/topmenu.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/hb/default/template/page/html/header.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/fsd/default/template/catalog/product/list.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/fsd/default/template/page/html/header.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/skin/frontend/fsd/default/styles.css",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/fsd/default/template/page/html/distraction-free-header.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/review/helper/summary.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/page/html/distraction-free-header.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/page/html/footer.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/page/html/topmenu.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/skin/frontend/activz/default/styles.css",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/review/product/view/list.phtml",
-		"/C/Windows/System32/drivers/etc/hosts",
-		"/C/xampp/apache/conf/httpd.conf",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/layout/catalog.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/page/html/header.phtml",
-		"/C/xampp/htdocs/www/new-efoods/index.php",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/review/product/view/list.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/rating/detailed.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/rating/empty.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/checkout/onepage.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/layout/wordpress/cpt.xml",
-		"/C/xampp/htdocs/www/fsd1.9/.htaccess",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/fsd/default/template/page/html/distraction-free-footer.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/fsd/default/layout/local.xml",
-		"/C/xampp/php/php.ini",
-		"/C/xampp/php/php.ini-development",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/page/html/distraction-free-footer.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/sb/default/template/page/html/distraction-free-footer.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/fsd/default/template/page/html/footer.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/sb/default/layout/local.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/addtocart.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/fsd/default/template/checkout/cart/noItems.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/checkout/cart/noItems.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/checkout/cart/notItems.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/page/pages/coconut.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/sb/default/template/catalog/product/view/addtocart.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/checkout/cart/noItems.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/fsd/default/template/checkout/success.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/sb/default/template/checkout/success.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/checkout/success.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/adminhtml/default/default/template/dashboard/index.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/wp/wp-trackback.php",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/checkout/onepage/review/info.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/checkout/onepage/review/item.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/layout/checkout.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/code/local/Ffhi/Fullwidth/etc/config.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/page/2columns-right.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/page/1column.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/wordpress/recipe/view.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/wordpress/recipe/list.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/wp/wp-config.php",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/page/distraction-free-right.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/index.php",
-		"/C/xampp/htdocs/www/fsd1.9/app/etc/modules/Ffhi_Fullwidth.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/checkout/onepage/review/totals.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/checkout/onepage/review/totals.phtml-bak",
-		"/C/xampp/htdocs/www/activz.com/app/etc/modules/Ffhi_Core.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/page/html/social_links.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/etc/modules/ffh_layouts.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/page/full-width.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/etc/modules/ffh_BootstrapNavigation.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/code/local/Ffhi/layouts/etc/config.xml",
-		"/C/xampp/htdocs/www/activz.com/app/code/local/Ffhi/Core/etc/config.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/checkout/onepage.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/checkout/progress.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/wordpress/post/view.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/wordpress/post/list/renderer/default.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/sb/default/template/page/pages/home.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/code/local/Ffhi/MarketingAttributesManager/etc/config.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/code/local/Ffhi/ManagerRecurringProfile/etc/config.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/etc/local.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/page/pages/discover.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/page/pages/freshondemand.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/code/local/ffh_layouts/ffh_layouts/etc/config.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/wordpress-addons/yarpp/sidebar/widget.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/wordpress/sidebar/widget/taxonomy.phtml",
-		"/C/xampp/htdocs/www/activz.com/app/design/frontend/shop.activz.com/default/template/buynow.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/wordpress/sidebar/widget/taxonomy/renderer.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/catalog/product/list.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/wordpress/sidebar/widget/categories.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/wordpress/sidebar.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/wordpress/post/view.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/wordpress-addons/yarpp/related.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/wordpress/shortcode/product.phtml",
-		"/C/xampp/htdocs/www/activz.com/app/design/frontend/shop.activz.com/default/template/page/radio_ad.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/wordpress/shortcode/product.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/wordpress/shortcode/recipe-list.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/catalog/category-list.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/wordpress/post/recipe-view.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/wordpress/page/view.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/wordpress-addons/cpt/view.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/sb/default/template/page/pages/freshondemand.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/wordpress/sidebar/widget/cpt-categories.phtml",
-		"/c/xampp/htdocs/www/fsd1.9/app/code/community/Fishpig/Wordpress/Block/Sidebar/Widget/Categories.php",
-		"/c/xampp/htdocs/www/fsd1.9/app/code/community/Fishpig/Wordpress/Block/Sidebar/Widget/Abstract.php",
-		"/C/xampp/htdocs/www/fsd1.9/app/etc/modules/Ffhi_Core.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/code/local/ffhi/core/etc/config.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/layout/wordpress/integrated-search.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/layout/page.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/sb/default/template/wordpress/post/view.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/page/full_width.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/customer/account/dashboard/hello.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/page/html/pager.phtml",
-		"/c/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/catalog/product/list/toolbar.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/catalogsearch/form.mini.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/code/local/ffhi/config.xml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/customer/account/dashboard/hello.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/catalog/product/list/toolbar.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/checkout/cart.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/checkout/onepage/review/totals.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/checkout/onepage/payment.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/checkout/onepage/payment.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/persistent/checkout/onepage/login.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/persistent/checkout/onepage/billing.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/checkout/onepage/shipping.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/activz/default/template/checkout/onepage/shipping_method.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/checkout/onepage/payment/info.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/checkout/onepage/shipping_method.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/app/design/frontend/base/default/template/checkout/onepage/billing.phtml",
-		"/C/xampp/htdocs/www/fsd1.9/composer.json",
-		"/C/xampp/htdocs/www/fsd1.9/wp/wp-admin/custom-header.php",
-		"/C/xampp/htdocs/www/fsd1.9/lib/Zend/Locale/Data/kk_Cyrl_KZ.xml"
+		"/C/Users/user/ionic/weather/ionic.project",
+		"/C/Users/user/ionic/weather/www/templates/login.html",
+		"/C/Users/user/ionic/weather/www/lib/angular-ui-validate/README.md",
+		"/C/Users/user/ionic/weather/www/js/app.js",
+		"/C/Users/user/ionic/weather/www/templates/playlists.html",
+		"/C/Users/user/ionic/todo/www/js/app.js",
+		"/C/Users/user/ionic/todo/www/index.html",
+		"/C/Windows/System32/Drivers/etc/hosts"
 	],
 	"find":
 	{
-		"height": 34.0
+		"height": 23.0
 	},
 	"find_in_files":
 	{
 		"height": 90.0,
 		"where_history":
 		[
-			"c:\\xampp\\htdocs\\www\\fsd1.9\\",
-			"c:\\xampp\\htdocs\\www\\fsd1.9\\app\\design\\frontend",
-			"c:\\xampp\\htdocs\\www\\fsd1.9\\app\\",
-			"c:\\xampp\\htdocs\\www\\fsd1.9\\app\\design\\frontend\\activz\\default\\template\\",
-			"c:\\xampp\\htdocs\\www\\fsd1.9\\",
-			"c:\\xampp\\htdocs\\www\\fsd1.9\\app\\code\\community\\",
-			"c:\\xampp\\htdocs\\www\\fsd1.9\\app\\design\\frontend\\",
-			"c:\\xampp\\htdocs\\www\\fsd1.9\\app\\design\\frontend\\base\\default\\template\\wordpress",
-			"c:\\xampp\\htdocs\\www\\fsd1.9\\app\\design\\frontend\\base\\default\\template",
-			"c:\\xampp\\htdocs\\www\\fsd1.9\\app\\design\\frontend\\sb\\default\\template",
-			"c:\\wamp\\www\\fsd1.9\\app\\design\\frontend\\sb\\default\\template",
-			"c:\\wamp\\www\\fsd1.9\\app\\design\\frontend",
-			"c:\\wamp\\www\\fsd1.9\\app\\design\\frontend\\base\\default\\template",
-			"c:\\wamp\\www\\fsd1.9\\app\\design\\frontend\\based\\default\\template",
-			"c:\\wamp\\www\\fsd1.9\\wp",
-			"c:\\wamp\\www\\fsd1.9\\app\\design\\frontend\\fsd",
-			"c:\\wamp\\www\\food-supply-depot\\app",
-			"c:\\wamp\\www\\healthbased\\app\\design\\frontend\\base\\default\\template",
-			"c:\\wamp\\www\\healthbased\\app\\design\\frontend\\base\\default\\template\\checkout\\",
-			"c:\\wamp\\www\\healthbased\\app\\design\\frontend\\based\\default\\template\\checkout\\",
-			"c:\\wamp\\www\\healthbased\\app\\design\\frontend\\based\\default\\template\\checkout",
-			"c:\\wamp\\www\\magento\\magento1.9\\app\\design\\frontend\\base\\default\\layout\\",
-			"c:\\wamp\\www\\magento\\magento1.9\\app\\design\\frontend\\",
-			"c:\\wamp\\www\\magento\\magento1.9\\app\\design\\frontend\\ffh",
-			"c:\\wamp\\www\\new-activz-2013",
-			""
+			"c:\\Users\\user\\ionic\\weather\\www",
+			"c:\\users\\ionic\\weather\\www"
 		]
 	},
 	"find_state":
@@ -473,134 +167,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"googleapis",
-			"Sans",
-			"if",
-			"blog",
-			"catalog_product_view",
-			"upload_max",
-			"upload",
-			"ivanbase",
-			"ivan",
-			"featured-im",
-			"https://activz.com/",
-			"activz.com",
-			"featur",
-			"row-fluid",
-			"offset",
-			"span",
-			"Fruit_Banana",
-			"shop.activz.com",
-			".wordpress-post-category-view",
-			"wp-term-list",
-			"hasCategories",
-			"hasCategories(",
-			"Fishpig_Wordpress_Block_Sidebar_Widget_Abstract",
-			"$terms",
-			"wordpress/term_collection",
-			"whatis",
-			"base",
-			"discovery3",
-			"discover3",
-			"offset",
-			"-sm-",
-			"span",
-			"row-fluid",
-			"empty_landing",
-			"/learn-more/",
-			"/skin/frontend/shop.activz.com/default/",
-			"768",
-			"_product",
-			"Bebas",
-			"page-title",
-			"preview",
-			"amount col-sm-4",
-			"main",
-			"button",
-			"page",
-			"Recently Viewed",
-			"noconflict",
-			"ig",
-			"header",
-			"home_featured.phtml",
-			"dropdown-menu",
-			"navbar-default",
-			"#dddddd",
-			"#e7e7e8",
-			"#main",
-			"search",
-			"Morecc",
-			"Acimpro",
-			"Aumd",
-			"fishpig",
-			"aumd",
-			"acimpro",
-			"855-247",
-			"855",
-			"</a>",
-			"head",
-			"post-excerpt",
-			"mont",
-			"monser",
-			"<h2>footer links",
-			"main-footer",
-			"class=\"links",
-			"click-here",
-			".click-here",
-			"au-leftCol",
-			"beta.food",
-			"blog",
-			"search",
-			"beta.foodsupplydepot.net",
-			"20px",
-			"25px",
-			"h1",
-			"%;\n",
-			".links",
-			".perfection",
-			"footer",
-			"fsd.tt",
-			"$base",
-			"multi",
-			"#main-footer",
-			"header",
-			"-sm-",
-			"20",
-			"fontaw",
-			"-40",
-			"h1",
-			"glyph",
-			"button",
-			"CUSTOMER_ACCOUNT_NA",
-			"hidden-xs hidden-sm",
-			"#main-h",
-			"callout2",
-			".quick",
-			"media(",
-			"FontAwes",
-			"fontA",
-			"_link",
-			"two-col",
-			"about",
-			"footer",
-			"need it",
-			"gray",
-			"miss",
-			"hero-image",
-			"serif-",
-			"retailer",
-			"FSD_about_vendorLogos.png",
-			"sm",
-			"md",
-			"sm",
-			"commander gear",
-			"duck_commander",
-			"$update",
-			"/bower_components/font-awesome/",
-			"checkout",
-			"update to",
-			"update",
-			"get a quote"
+			"Starter",
+			"starter",
+			"search"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -608,43 +177,6 @@
 		"regex": false,
 		"replace_history":
 		[
-			"/",
-			"row",
-			"offset-",
-			"col-sm-offset",
-			"col-sm-",
-			"ffh_layouts",
-			"activz",
-			".activz-blog",
-			"col-sm-offset-",
-			"col-sm-",
-			"row",
-			"full_width",
-			"/discover/",
-			"<?php echo $this->getSkinUrl('",
-			"product",
-			"#ad9975",
-			"#f0e9dc",
-			"fsd.tt",
-			"#footer",
-			"-md-",
-			"15",
-			"__link",
-			"xs",
-			"duck_commander_1column",
-			"/",
-			"#e7e7e8",
-			"#F1592A",
-			"-webkit",
-			"498b2a",
-			"green",
-			"purple",
-			"aaad00",
-			"498b2a",
-			"green",
-			"5",
-			"/skin/frontend/shop.activz.com/default/images",
-			"home-page-carousel"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -655,77 +187,140 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "www/templates/addLocation.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 807,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								408,
-								434
-							]
-						],
-						"settings":
-						{
-							"color_scheme": "Packages/User/Color Highlighter/themes/Twilight (SL).tmTheme",
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
 					"file": "www/js/controllers.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2875,
+						"buffer_size": 3583,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1448,
-								1448
+								2943,
+								2943
 							]
 						],
 						"settings":
 						{
-							"color_scheme": "Packages/User/Color Highlighter/themes/Twilight (SL).tmTheme",
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 195.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 1,
 					"file": "www/js/app.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2123,
+						"buffer_size": 2132,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1276,
+								1282
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 523.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "www/index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 928,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								873,
+								873
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 3,
+					"file": "www/templates/playlist.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 100,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								82,
+								82
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "www/templates/playlists.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 245,
 						"regions":
 						{
 						},
@@ -738,8 +333,35 @@
 						],
 						"settings":
 						{
-							"color_scheme": "Packages/User/Color Highlighter/themes/Twilight (SL).tmTheme",
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "www/templates/menu.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1164,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								858,
+								870
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
@@ -747,7 +369,65 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "www/templates/addLocation.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1415,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1021,
+								1021
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false,
+							"word_wrap": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 14.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "www/templates/browse.html",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 96,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
 					"type": "text"
 				}
 			]
@@ -759,7 +439,7 @@
 	},
 	"input":
 	{
-		"height": 30.0
+		"height": 0.0
 	},
 	"layout":
 	{
@@ -770,11 +450,18 @@
 				0,
 				1,
 				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
 			]
 		],
 		"cols":
 		[
 			0.0,
+			0.404191616766,
 			1.0
 		],
 		"rows":
@@ -792,7 +479,7 @@
 	"project": "weather.sublime-project",
 	"replace":
 	{
-		"height": 62.0
+		"height": 42.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -801,426 +488,6 @@
 		"last_filter": "",
 		"selected_items":
 		[
-			[
-				".ht",
-				".htaccess"
-			],
-			[
-				"app/design/frontend/activz/template/catalog/prodcut/view",
-				"app\\design\\frontend\\activz\\default\\template\\catalog\\product\\view.phtml"
-			],
-			[
-				"skin/frontend/activz/styles.",
-				"skin\\frontend\\activz\\default\\styles.css"
-			],
-			[
-				"app/design/activz/distraction",
-				"app\\design\\frontend\\activz\\default\\template\\page\\html\\distraction-free-footer.phtml"
-			],
-			[
-				"app/design/frontend/sb/distraction",
-				"app\\design\\frontend\\sb\\default\\template\\page\\html\\distraction-free-footer.phtml"
-			],
-			[
-				"app/design/sb/template/distraction",
-				"app\\design\\frontend\\sb\\default\\template\\page\\html\\distraction-free-footer.phtml"
-			],
-			[
-				"app/design/activz/template/page/html/distra",
-				"app\\design\\frontend\\activz\\default\\template\\page\\html\\distraction-free-header.phtml"
-			],
-			[
-				"app/design/fsd/layout/local.",
-				"app\\design\\frontend\\fsd\\default\\layout\\local.xml"
-			],
-			[
-				"skin/frontend/activz/styles.css",
-				"skin\\frontend\\activz\\default\\styles.css"
-			],
-			[
-				"app/design/frontend/sb/default/template/checkout/suc",
-				"app\\design\\frontend\\base\\default\\template\\checkout\\success.phtml"
-			],
-			[
-				"app/design/frontend/activz/template/page/hmtl/page",
-				"app\\design\\frontend\\activz\\default\\template\\page\\html\\pager.phtml"
-			],
-			[
-				"app/design/frontend/activz/template/catalog/products/toolbar",
-				"app\\design\\frontend\\activz\\default\\template\\catalog\\product\\list\\toolbar.phtml"
-			],
-			[
-				"app/design/frontend/activz/template/footer.p",
-				"app\\design\\frontend\\activz\\default\\template\\page\\html\\footer.phtml"
-			],
-			[
-				"skin/frontend/fsd/styles.css",
-				"skin\\frontend\\fsd\\default\\styles.css"
-			],
-			[
-				"app/design/frontend/activz/default/layout/l",
-				"app\\design\\frontend\\activz\\default\\layout\\local.xml"
-			],
-			[
-				"app/etc/local",
-				"app\\etc\\local.xml"
-			],
-			[
-				"home_featured",
-				"app\\design\\frontend\\default\\default\\template\\catalogextensions\\home_featured.phtml"
-			],
-			[
-				"skin/frontend/sb/styles.css",
-				"skin\\frontend\\sb\\default\\styles.css"
-			],
-			[
-				"app/frontend/sb/header.",
-				"app\\design\\frontend\\sb\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"skin/frontend/sb/styles",
-				"skin\\frontend\\sb\\default\\styles.css"
-			],
-			[
-				"app/design/hb/header.",
-				"app\\design\\frontend\\hb\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"skin/frontend/fsd/styles.c",
-				"skin\\frontend\\fsd\\default\\styles.css"
-			],
-			[
-				"app/design/frontend/fsd/header.ph",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"app/design/frontend/sb/header.phtml",
-				"app\\design\\frontend\\sb\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"app/design/frontend/sb/wordpress/sidebar/",
-				"c:\\xampp\\htdocs\\www\\fsd1.9\\app\\design\\frontend\\base\\default\\template\\wordpress\\sidebar\\widget\\categoryposts.phtml"
-			],
-			[
-				"app/etc/local.",
-				"app\\etc\\local.xml"
-			],
-			[
-				"app/sb/header.phtml",
-				"app\\design\\frontend\\sb\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"skin/fsd/styles.css",
-				"skin\\frontend\\fsd\\default\\styles.css"
-			],
-			[
-				"app/design/fsd/footer.p",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\html\\footer.phtml"
-			],
-			[
-				"design/sb/footer",
-				"app\\design\\frontend\\sb\\default\\template\\page\\html\\footer.phtml"
-			],
-			[
-				"app/design/sb/template/header.p",
-				"app\\design\\frontend\\sb\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"wp/wp-config.php",
-				"wp\\wp-config.php"
-			],
-			[
-				"sb/styles.css",
-				"skin\\frontend\\sb\\default\\styles.css"
-			],
-			[
-				"sb/home.phtml",
-				"app\\design\\frontend\\sb\\default\\template\\page\\pages\\home.phtml"
-			],
-			[
-				"styles.css",
-				"errors\\default\\css\\styles.css"
-			],
-			[
-				"app/frontend/sb/topsearch.p",
-				"app\\design\\frontend\\base\\default\\template\\wordpress\\sidebar\\widget\\search.phtml"
-			],
-			[
-				"app/frontend/sb/menu",
-				"app\\design\\frontend\\sb\\default\\template\\page\\html\\topmenu.phtml"
-			],
-			[
-				"app/frontend/sb/header.phtml",
-				"app\\design\\frontend\\sb\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"app/frontend/fsd/about.ph",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\pages\\about.phtml"
-			],
-			[
-				"skin/frontend/fsd/styles.",
-				"skin\\frontend\\fsd\\default\\styles.css"
-			],
-			[
-				"app/design/fronted/fsd/footer.phtml",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\html\\footer.phtml"
-			],
-			[
-				"app/frontend/fsd/about.phtml",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\pages\\about.phtml"
-			],
-			[
-				"app/frontend/fsd/header.phtml",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"app/sb/layout/local",
-				"app\\design\\frontend\\sb\\default\\layout\\local.xml"
-			],
-			[
-				"app/frontend/fsd/footer.p",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\html\\footer.phtml"
-			],
-			[
-				"app/sb/topment",
-				"app\\design\\frontend\\sb\\default\\template\\page\\html\\topmenu.phtml"
-			],
-			[
-				"app/frontend/fsd/home.phtml",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\pages\\home.phtml"
-			],
-			[
-				"skin/frontend/fsd/style.css",
-				"skin\\frontend\\fsd\\default\\dist\\css\\style.css"
-			],
-			[
-				"app/frontend/sb/header.phtm",
-				"app\\design\\frontend\\sb\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"app/bcg/links.phtm",
-				"app\\design\\frontend\\buck\\default\\template\\page\\template\\links.phtml"
-			],
-			[
-				"app/dcm/links.pht",
-				"app\\design\\frontend\\dcm\\default\\template\\page\\template\\links.phtml"
-			],
-			[
-				"app/fsd/links.",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\template\\links.phtml"
-			],
-			[
-				"app/frontend/top.links",
-				"app\\design\\frontend\\base\\default\\template\\page\\html\\top.links.phtml"
-			],
-			[
-				"app/frontend/fsd/header",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"app/frontend/header.phtml",
-				"app\\design\\frontend\\dcm\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"app/frontend/header.p",
-				"app\\design\\frontend\\buck\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"app/frontend/header.phtm",
-				"app\\design\\frontend\\buck\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"app/etc/lo",
-				"app\\etc\\local.xml"
-			],
-			[
-				"app/cdoe/local/aschroder/smtppro/lib/ama",
-				"app\\code\\local\\Aschroder\\SMTPPro\\lib\\AmazonSES.php"
-			],
-			[
-				"app/buck/topment",
-				"app\\design\\frontend\\buck\\default\\template\\page\\html\\topmenu.phtml"
-			],
-			[
-				"app/dcm/topmen",
-				"app\\design\\frontend\\dcm\\default\\template\\page\\html\\topmenu.phtml"
-			],
-			[
-				"app/fsd/topme",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\html\\topmenu.phtml"
-			],
-			[
-				"app/dcm/header.",
-				"app\\design\\frontend\\dcm\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"app/buck/header.p",
-				"app\\design\\frontend\\buck\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"app/fsd/header.p",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"fsd/3col",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\3columns.phtml"
-			],
-			[
-				"app/buck/footer.ph",
-				"app\\design\\frontend\\buck\\default\\template\\page\\html\\footer.phtml"
-			],
-			[
-				"app/dcm/footer.p",
-				"app\\design\\frontend\\dcm\\default\\template\\page\\html\\footer.phtml"
-			],
-			[
-				"app/fsd/footer",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\html\\footer.phtml"
-			],
-			[
-				"app/3colm",
-				"app\\design\\frontend\\buck\\default\\template\\page\\3columns.phtml"
-			],
-			[
-				"app/dcm/3col",
-				"app\\design\\frontend\\dcm\\default\\template\\page\\3columns.phtml"
-			],
-			[
-				"app/fsd/3col",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\3columns.phtml"
-			],
-			[
-				"app/frontend/3co",
-				"app\\design\\frontend\\dcm\\default\\template\\page\\3columns.phtml"
-			],
-			[
-				"app/frontend/3col",
-				"app\\design\\frontend\\buck\\default\\template\\page\\3columns.phtml"
-			],
-			[
-				"app/frontend/fsd/3co",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\3columns.phtml"
-			],
-			[
-				"app/fsd/toplinks",
-				"app\\design\\frontend\\base\\default\\template\\page\\html\\top.links.phtml"
-			],
-			[
-				"app/fsd/header.pht",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"app/buck/topmenu.p",
-				"app\\design\\frontend\\buck\\default\\template\\page\\html\\topmenu.phtml"
-			],
-			[
-				"app/dcm/topmentu",
-				"app\\design\\frontend\\dcm\\default\\template\\page\\html\\topmenu.phtml"
-			],
-			[
-				"app/buck/footer.p",
-				"app\\design\\frontend\\buck\\default\\template\\page\\html\\footer.phtml"
-			],
-			[
-				"app/fsd/footer.ph",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\html\\footer.phtml"
-			],
-			[
-				"skin/buck/styles.",
-				"skin\\frontend\\buck\\default\\styles.css"
-			],
-			[
-				"skin/dcm/styles",
-				"skin\\frontend\\dcm\\default\\styles.css"
-			],
-			[
-				"app/frontend/fsd/footer.h",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\html\\footer.phtml"
-			],
-			[
-				"app/fsd/local.",
-				"app\\design\\frontend\\fsd\\default\\layout\\local.xml"
-			],
-			[
-				"app/frontend/base/catalog.xml",
-				"app\\design\\frontend\\base\\default\\layout\\catalog.xml"
-			],
-			[
-				"app/dcm/header.p",
-				"app\\design\\frontend\\dcm\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"app/frontend/bcg/header.phtml",
-				"app\\design\\frontend\\buck\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"app/design/pages/home",
-				"app\\design\\frontend\\buck\\default\\template\\page\\pages\\home.phtml"
-			],
-			[
-				"skin/styles.css",
-				"skin\\frontend\\fsd\\default\\styles.css"
-			],
-			[
-				"skin/frontend/styles.css",
-				"skin\\frontend\\buck\\default\\styles.css"
-			],
-			[
-				"app/fsd/template/page/header.p",
-				"app\\design\\frontend\\fsd\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"brand",
-				"skin\\frontend\\fsd\\default\\css\\brand_template.css"
-			],
-			[
-				"lib/zend/cache/backend/file",
-				"lib\\Zend\\Cache\\Backend\\File.php"
-			],
-			[
-				"app/ffh/footer.p",
-				"app\\design\\frontend\\ffh\\default\\template\\page\\html\\footer.phtml"
-			],
-			[
-				"app/frontend/ffh/header.",
-				"app\\design\\frontend\\ffh\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"app/ffh/local.xm",
-				"app\\design\\frontend\\ffh\\default\\layout\\local.xml"
-			],
-			[
-				"app/ffh/local/",
-				"app\\design\\frontend\\default\\iphone\\locale\\en_US\\translate.csv"
-			],
-			[
-				"app/design/ffh/wishlist",
-				"app\\design\\frontend\\default\\iphone\\layout\\wishlist.xml"
-			],
-			[
-				"skin/ffh/style.css",
-				"skin\\frontend\\ffh\\default\\dist\\css\\style.css"
-			],
-			[
-				"app/ffh/topmenu",
-				"app\\design\\frontend\\ffh\\default\\template\\page\\html\\topmenu.phtml"
-			],
-			[
-				"app/ffh/toplin",
-				"app\\design\\frontend\\base\\default\\template\\page\\html\\top.links.phtml"
-			],
-			[
-				"app/design/frontend/ffh/footer",
-				"app\\design\\frontend\\ffh\\default\\template\\page\\html\\footer.phtml"
-			],
-			[
-				"app/frontend/ffh/header.pth",
-				"app\\design\\frontend\\ffh\\default\\template\\page\\html\\header.phtml"
-			],
-			[
-				"skin/frontend/ffh/styles",
-				"skin\\frontend\\ffh\\default\\styles.css"
-			]
 		],
 		"width": 0.0
 	},
@@ -1250,7 +517,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 388.0,
+	"side_bar_width": 250.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
