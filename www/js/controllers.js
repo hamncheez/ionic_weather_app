@@ -79,19 +79,19 @@ angular.module('weather.controllers', [])
   var reset = function(){
     if($scope.locationInfo){
       $scope.locationInfo = null;
-
     } 
   };
 
   $scope.locations = Locations.all();
   $scope.activeLocation = Locations.getActiveLocation();
 
-   $scope.goToLocation = function(){
-    var index = [$scope.locationInfo.city.name, $scope.searchInfo.zip];
+  $scope.goToLocation = function(){
+    var index = {name : $scope.locationInfo.city.name, zip : $scope.searchInfo.zip};
     Locations.setActiveLocation(index);
-    $state.go('app.view');
+    $state.go('app.view', {}, {reload:true});
+    $scope.closeModal();
      
-  }
+  };
 
   $scope.findZip = function(){
     var owmUrl = "http://api.openweathermap.org/data/2.5/forecast";
@@ -137,14 +137,9 @@ angular.module('weather.controllers', [])
 })
 
 
-.controller('forecastViewCtrl', function($scope){
-  $scope.locations = [
-    { id:1, zip:'84663' },
-    { id:2, zip:'91775' },
-    { id:3, zip:'84606' }
-
-  ];
-
+.controller('forecastViewCtrl', function($scope, Locations){
+  $scope.active = Locations.getActiveLocation();
+  console.log($scope.active);
 })
 
 

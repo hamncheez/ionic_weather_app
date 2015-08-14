@@ -70,7 +70,7 @@ angular.module('weather', ['ionic', 'weather.controllers', 'ui.validate'])
   })
 
   .state('app.view', {
-    url: '/view/:locationId',
+    url: '/view',
     views: {
       'menuContent': {
         templateUrl: 'templates/forecastView.html',
@@ -78,33 +78,35 @@ angular.module('weather', ['ionic', 'weather.controllers', 'ui.validate'])
       }
     }
   })
-  .factory('Locations', function(){
-    return {
-      all: function(){
+  
+  ;
+  // if none of the above states are matched, use this as the fallback
+  $urlRouterProvider.otherwise('/app/search');
+})
+.factory('Locations', function(){
+  return {
+    all: function(){
         var locationString = window.localStorage['locations'];
         if(locationString){
           return angular.fromJson(locationString);
         }
         return [];
-        save: function(locationData){
-          window.localStorage['locations'] = angular.toJson(locationData);
-        },
-        newLocation: function(name, zip){
-          return {
-            name: name,
-            zip: zip, 
-          };
-        },
-        setActiveLocation: function(index){
-          window.localStorage['activeLocation'] = angular.toJson(index);
-        },
-        getActiveLocation: function(){
-          return window.localStorage['activeLocation'];
-        }
+      },
+      save: function(locationData){
+        window.localStorage['locations'] = angular.toJson(locationData);
+      },
+      newLocation: function(name, zip){
+        return {
+          name: name,
+          zip: zip, 
+        };
+      },
+      setActiveLocation: function(index){
+        window.localStorage['activeLocation'] = angular.toJson(index);
+      },
+      getActiveLocation: function(){
+        return JSON.parse(window.localStorage['activeLocation'] || '{}');
       }
-    }
-  })
-  ;
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/search');
-});
+    };
+})
+;
