@@ -9,18 +9,6 @@ angular.module('weather.controllers', [])
   //$scope.$on('$ionicView.enter', function(e) {
   //});
 
-  // Form data for the login modal
-  $scope.loginData = {};
-
-  // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    id: '1',
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
-
   //addLocation modal
   $ionicModal.fromTemplateUrl('templates/addLocation.html', {
     id: '0',
@@ -40,32 +28,10 @@ angular.module('weather.controllers', [])
   };
 
 
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
-  };
-
-  //open any modal by id
- /* $scope.openModal = function(index){
-    if(index == 1) $scope.modal.show();
-    else $scope.addLocationModal.show();
-
-  };*/
-
   $scope.addLocation = function(){
       $scope.addLocationModal.show();
   };
 
-  // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
-
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
-  };
 
 
 
@@ -99,6 +65,11 @@ angular.module('weather.controllers', [])
 
   $scope.saveLocation = function(){
     var newLocation = Locations.newLocation($scope.locationInfo.city.name, $scope.searchInfo.zip);
+
+    if($scope.locations == null){
+      $scope.locations = [];
+    }
+
     $scope.locations.push(newLocation);
     Locations.save($scope.locations);
     $scope.goToLocation();
@@ -129,9 +100,6 @@ angular.module('weather.controllers', [])
         });
 
       }
-      /*else if ($scope.locationInfo.cod == "200"){
-        alert('works!');
-      }*/
     }, function(){
       alert('no go');
     });
@@ -140,34 +108,18 @@ angular.module('weather.controllers', [])
 
  
 
-/*  $http.get(owmUrl,{params:{'zip': $scope.searchInfo.zip}})
-  .success(function(data){
-    $scope.locationInfo = data; 
-  });
-*/
 })
 
 
 .controller('forecastViewCtrl', function($scope, Locations){
   $scope.locations = Locations.all();
 
+  $scope.selectLocation = function(location){
 
+  };
 
   $scope.active = Locations.getActiveLocation();
   console.log($scope.active);
-})
-
-
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
-})
-
-.controller('PlaylistCtrl', function($scope, $stateParams) {
 });
+
+
