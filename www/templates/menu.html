@@ -17,11 +17,14 @@
       <h1 class="title">Locations</h1>
     </ion-header-bar>
     <ion-content>
-      <ion-list>
+      <ion-list ng-controller="forecastViewCtrl">
         <ion-item menu-close ng-click="addLocation()">
           <i class="ion-plus-circled"></i> Add Location
         </ion-item>
-        <ion-item menu-close ng-click="login()">
+        <ion-item ng-repeat="location in locations" ng-click="selectLocation(location, $index);" ng-class="{active: activeLocation = location}">
+          {{location.name}}
+        </ion-item>
+        <!-- <ion-item menu-close ng-click="login()">
           Login
         </ion-item>
         <ion-item menu-close href="#/app/search">
@@ -32,7 +35,7 @@
         </ion-item>
         <ion-item menu-close href="#/app/playlists">
           Playlists
-        </ion-item>
+        </ion-item> -->
       </ion-list>
     </ion-content>
   </ion-side-menu>
