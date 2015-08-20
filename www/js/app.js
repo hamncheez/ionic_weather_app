@@ -36,7 +36,7 @@ angular.module('weather', ['ionic', 'weather.controllers', 'ui.validate'])
     views: {
       'menuContent': {
         templateUrl: 'templates/forecastView.html',
-        controller: 'forecastViewCtrl'
+        controller: 'GetLocationCtrl'
       }
     }
   })
@@ -68,6 +68,14 @@ angular.module('weather', ['ionic', 'weather.controllers', 'ui.validate'])
       },
       getActiveLocation: function(){
         return JSON.parse(window.localStorage['activeLocation'] || '{}');
+      },
+      getLocationIndex: function(list, key, value){
+        for (var i = 0; i < list.length; i++){
+          if (list[i][key] == value){
+            return i;
+          }
+        }
+        return null;
       }
     };
 })

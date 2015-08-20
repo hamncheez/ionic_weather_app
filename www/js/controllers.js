@@ -1,6 +1,6 @@
 angular.module('weather.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -21,14 +21,11 @@ angular.module('weather.controllers', [])
 
   // Triggered in the login modal to close it
   $scope.closeModal = function() {
-    $scope.modal.hide();
-    if($scope.addLocationModal){
       $scope.addLocationModal.hide();
-    }
   };
 
 
-  $scope.addLocation = function(){
+  $scope.addModal = function(){
       $scope.addLocationModal.show();
   };
 
@@ -38,11 +35,34 @@ angular.module('weather.controllers', [])
 })
 
 
-.controller('GetLocationCtrl', function($scope, $http, $state, Locations){
+.controller('GetLocationCtrl', function($scope, $ionicModal, $http, $state,  Locations){
   $scope.locationInfo = {};
   $scope.searchInfo = {};
 
+  // $ionicModal.fromTemplateUrl('templates/addLocation.html', function(modal){
+  //   $scope.addLocationModal = modal;
+  // });
+  
+  $scope.closeModal = function() {
+      $scope.addLocationModal.hide();
+  };
+
+
+  $scope.addModal = function(){
+      $scope.addLocationModal.show();
+  };
+
+
   $scope.locations = Locations.all();
+
+  $scope.deleteLocation = function(location){
+      var index = Locations.getLocationIndex($scope.locations, 'zip', location);
+      if (index >-1){
+        $scope.locations.splice(index, 1);
+      }
+      console.log($scope.locations);
+
+  };
 
   var reset = function(){
     if($scope.locationInfo){
@@ -106,20 +126,11 @@ angular.module('weather.controllers', [])
 
   };
 
+ $scope.active = Locations.getActiveLocation();
+  console.log($scope.active);
  
 
 })
-
-
-.controller('forecastViewCtrl', function($scope, Locations){
-  $scope.locations = Locations.all();
-
-  $scope.selectLocation = function(location){
-
-  };
-
-  $scope.active = Locations.getActiveLocation();
-  console.log($scope.active);
-});
+;
 
 
