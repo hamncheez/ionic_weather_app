@@ -10,17 +10,17 @@ angular.module('weather.controllers', [])
   //});
 
   //addLocation modal
-  $ionicModal.fromTemplateUrl('templates/addLocation.html', {
+/*  $ionicModal.fromTemplateUrl('templates/addLocation.html', {
     id: '0',
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal){
     $scope.addLocationModal = modal;
   });
-
+*/
 
   // Triggered in the login modal to close it
-  $scope.closeModal = function() {
+/*  $scope.closeModal = function() {
       $scope.addLocationModal.hide();
   };
 
@@ -28,21 +28,34 @@ angular.module('weather.controllers', [])
   $scope.addModal = function(){
       $scope.addLocationModal.show();
   };
-
+*/
 
 
 
 })
 
 
-.controller('GetLocationCtrl', function($scope, $ionicModal, $http, $state,  Locations){
+.controller('GetLocationCtrl', function($scope, $ionicModal, $http, $state,  Locations, OwmApi){
+
+    //addLocation modal
+    $ionicModal.fromTemplateUrl('templates/addLocation.html', {
+      id: '0',
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function(modal){
+      $scope.addLocationModal = modal;
+    });
+
+
+
+
   $scope.locationInfo = {};
   $scope.searchInfo = {};
 
   // $ionicModal.fromTemplateUrl('templates/addLocation.html', function(modal){
   //   $scope.addLocationModal = modal;
   // });
-  
+
   $scope.closeModal = function() {
       $scope.addLocationModal.hide();
   };
@@ -61,6 +74,7 @@ angular.module('weather.controllers', [])
         $scope.locations.splice(index, 1);
       }
       console.log($scope.locations);
+      Locations.save($scope.locations);
 
   };
 
@@ -73,10 +87,14 @@ angular.module('weather.controllers', [])
   $scope.locations = Locations.all();
   $scope.activeLocation = Locations.getActiveLocation();
 
-  $scope.goToLocation = function(){
-    console.log('lelle');
+  $scope.goToLocation = function(zipId){
+    if(zipId){
+      var index = {name : Locations.getNamebyZip($scope.locations, 'zip', zipId), zip: zipId};
+    }
+    else{
+      var index = {name : $scope.locationInfo.city.name, zip : $scope.searchInfo.zip};
+    }
 
-    var index = {name : $scope.locationInfo.city.name, zip : $scope.searchInfo.zip};
     Locations.setActiveLocation(index);
     $state.go('app.view', {}, {reload:true});
     $scope.closeModal();
@@ -84,25 +102,36 @@ angular.module('weather.controllers', [])
   };
 
   $scope.saveLocation = function(){
-    var newLocation = Locations.newLocation($scope.locationInfo.city.name, $scope.searchInfo.zip);
-
     if($scope.locations == null){
       $scope.locations = [];
     }
 
-    $scope.locations.push(newLocation);
-    Locations.save($scope.locations);
+    var newLocation = Locations.newLocation($scope.locationInfo.city.name, $scope.searchInfo.zip);
+    var ifExists = Locations.checkIfExists($scope.locations, newLocation.zip);
+    if(ifExists == true){
+      alert("Already saved!"); 
+    }
+    else{
+      $scope.locations.push(newLocation);
+      Locations.save($scope.locations);
+    }
+
+
     $scope.goToLocation();
   }
 
   $scope.findZip = function(){
-    var owmUrl = "http://api.openweathermap.org/data/2.5/forecast";
-
+  // var owmUrl = "http://api.openweathermap.org/data/2.5/forecast";
+/*
     $http({
       method:'GET',
       url: owmUrl,
       params: {zip:$scope.searchInfo.zip}
-    }).then(function(response){
+    })*/
+
+    OwmApi.getZip($scope.searchInfo.zip)
+
+    .then(function(response){
       $scope.locationInfo = response.data;
       if($scope.locationInfo.cod == "404"){
         $scope.error = "Can't find that zip code!";

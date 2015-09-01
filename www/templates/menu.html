@@ -17,12 +17,12 @@
       <h1 class="title">Locations</h1>
     </ion-header-bar>
     <ion-content>
-      <ion-list ng-controller="GetLocationCtrl">
+      <ion-list >
         <ion-item menu-close ng-click="addModal()">
           <i class="ion-plus-circled"></i> Add Location
         </ion-item>
-        <ion-item ng-repeat="location in locations" ng-click="selectLocation(location);" ng-class="{active: activeLocation = location}">
-          <button class="button button-stable">{{location.name}}</button> 
+        <ion-item ng-repeat="location in locations"  ng-class="{active: activeLocation = location}">
+          <button class="button button-stable" ng-click="goToLocation(location.zip);" menu-toggle="left">{{location.name}}</button> 
           <button class="button button-icon" style="float:right" ng-click="deleteLocation(location.zip)">
             <i class="icon ion-trash-b"></i>
           </button>

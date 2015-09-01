@@ -76,7 +76,33 @@ angular.module('weather', ['ionic', 'weather.controllers', 'ui.validate'])
           }
         }
         return null;
+      },
+      getNamebyZip: function(list, key, value){
+        for (var i = 0; i < list.length; i++){
+          if (list[i][key] == value){
+            return list[i].name;
+          }
+        }
+        return null;
+      },
+      checkIfExists: function(list, externalZip){
+        for (var i in list){
+          if (list[i]['zip'] == externalZip){
+            return true;
+          }
+        }
+        return false;
       }
     };
+})
+.factory('OwmApi', function($http){
+    var owmUrl = "http://api.openweathermap.org/data/2.5/forecast";
+    var OwmApi = {};
+
+    OwmApi.getZip = function(externalZip){
+      return $http.get(owmUrl, {params : {zip: externalZip}});
+    };
+    return OwmApi;
+
 })
 ;
