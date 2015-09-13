@@ -160,6 +160,10 @@ angular.module('weather.controllers', [])
  
 
 })
+.controller('forecast', function($scope, $state,  Locations, OwmApi ){
+ $scope.city = Locations.getActiveLocation();
+
+})
 ;
 
 
