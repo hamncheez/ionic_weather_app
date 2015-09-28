@@ -1,5 +1,6 @@
 <ion-view view-title="forecast" cache-view="false" ng-controller="forecast">
   <ion-content >
-    <h1>forecast for: <br> {{city.name}}</h1>
+    <h1>forecast for: <br> {{city.city.name}}</h1>
+    <h3>time: {{city.list[0].dt | date:'medium'}}</h3>
   </ion-content>
 </ion-view>

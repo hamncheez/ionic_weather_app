@@ -43,7 +43,7 @@ angular.module('weather', ['ionic', 'weather.controllers', 'ui.validate'])
   
   ;
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/view');
+  $urlRouterProvider.otherwise('app/view');
 })
 .factory('Locations', function(){
   return {

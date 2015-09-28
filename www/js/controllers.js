@@ -161,7 +161,21 @@ angular.module('weather.controllers', [])
 
 })
 .controller('forecast', function($scope, $state,  Locations, OwmApi ){
- $scope.city = Locations.getActiveLocation();
+  OwmApi.getZip(Locations.getActiveLocation().zip)
+    .then(function(response){
+      $scope.city = response.data;
+      console.log($scope.city);
+      if($scope.city.cod =+ "404"){
+        $scope.error = "Something broke. Can't find the zip code for that city!"
+      }
+      else if ($scope.city.cod == "200"){
+        $scope.error = false;
+      }
+    }, function(){
+      alert('Check yo internet connection, homie')
+    })
+
+  ;
 
 })
 ;
