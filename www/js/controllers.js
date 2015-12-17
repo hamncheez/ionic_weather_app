@@ -35,7 +35,7 @@ angular.module('weather.controllers', [])
 })
 
 
-.controller('GetLocationCtrl', function($scope, $ionicModal, $http, $state,  Locations, OwmApi){
+.controller('GetLocationCtrl', function($scope, $ionicModal, $http, $state,  Locations, OwmApi, YahooApi){
 
     //addLocation modal
     $ionicModal.fromTemplateUrl('templates/addLocation.html', {
@@ -160,7 +160,7 @@ angular.module('weather.controllers', [])
  
 
 })
-.controller('forecast', function($scope, $state,  Locations, OwmApi ){
+.controller('forecast', function($scope, $state,  Locations, OwmApi){
 
 
   OwmApi.getZip(Locations.getActiveLocation().zip)
@@ -175,8 +175,16 @@ angular.module('weather.controllers', [])
         $scope.error = false;
       }
     }, function(){
-      alert('Check yo internet connection, homie')
+      console.log('Check yo internet connection, homie')
     });
+})
+.controller('testCtrl', function($scope, YahooApi){
+    YahooApi.yApi('location','provo, utah').then(function(response){
+      console.log(response.data);
+    }, function(){
+      console.log('didnt connect');
+    });
+
 })
 ;
 

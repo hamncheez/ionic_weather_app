@@ -1,0 +1,9 @@
+{
+  "firebase": "ionic-weather",
+  "public": "www",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}

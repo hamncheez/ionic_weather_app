@@ -40,6 +40,15 @@ angular.module('weather', ['ionic', 'weather.controllers', 'ui.validate'])
       }
     }
   })
+  .state('app.test', {
+    url:'/test',
+    views: {
+     'menuContent': {
+        templateUrl: 'templates/test.html',
+        controller: 'testCtrl'
+     } 
+    }
+  })
   
   ;
   // if none of the above states are matched, use this as the fallback
@@ -103,6 +112,15 @@ angular.module('weather', ['ionic', 'weather.controllers', 'ui.validate'])
       return $http.get(owmUrl, {params : {zip: externalZip}});
     };
     return OwmApi;
+
+})
+.factory('YahooApi', function($http){
+   this.yApi = function(query, location){
+    return "https://query.yahooapis.com/v1/public/yql?q=select%20"+query+"%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22"+location+"%22)&format=json";
+  };
+
+  return yApi;
+
 
 })
 ;
