@@ -56,27 +56,34 @@ angular.module('weather', ['ionic', 'weather.controllers', 'ui.validate'])
 })
 .factory('Locations', function(){
   return {
-    all: function(){
-        var locationString = window.localStorage['locations'];
-        if(locationString){
-          return angular.fromJson(locationString);
-        }
-        //return [];
+      all: function(){
+          var locationString = window.localStorage['locations'];
+          if(locationString){
+            return angular.fromJson(locationString);
+          }
+          //return [];
       },
       save: function(locationData){
         window.localStorage['locations'] = angular.toJson(locationData);
       },
-      newLocation: function(name, zip){
+      newLocation: function(name){
         return {
           name: name,
-          zip: zip, 
+         // zip: zip, 
         };
       },
       setActiveLocation: function(index){
-        window.localStorage['activeLocation'] = angular.toJson(index);
+        //window.localStorage['activeLocation'] = angular.toJson(index);
+        window.localStorage['activeLocation'] = index;
       },
       getActiveLocation: function(){
-        return JSON.parse(window.localStorage['activeLocation'] || '{}');
+        if(window.localStorage['activeLocation']){
+          return window.localStorage['activeLocation'];
+        }
+        else{
+          return "Seattle, WA"
+        }
+
       },
       getLocationIndex: function(list, key, value){
         for (var i = 0; i < list.length; i++){
@@ -94,15 +101,16 @@ angular.module('weather', ['ionic', 'weather.controllers', 'ui.validate'])
         }
         return null;
       },
-      checkIfExists: function(list, externalZip){
+      checkIfExists: function(list, externalCity){
         for (var i in list){
-          if (list[i]['zip'] == externalZip){
+          //console.log("loop: "+list[i].name+" does it equal "+ externalCity.name+"?");
+          if (list[i].name == externalCity.name){
             return true;
           }
         }
         return false;
       }
-    };
+  };
 })
 .factory('OwmApi', function($http){
     var owmUrl = "http://api.openweathermap.org/data/2.5/forecast";
@@ -115,11 +123,15 @@ angular.module('weather', ['ionic', 'weather.controllers', 'ui.validate'])
 
 })
 .factory('YahooApi', function($http){
-   this.yApi = function(query, location){
-    return "https://query.yahooapis.com/v1/public/yql?q=select%20"+query+"%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22"+location+"%22)&format=json";
+    var YahooApi = {};
+    var yurl = function(query, locale){
+      return "https://query.yahooapis.com/v1/public/yql?q=select%20"+query+"%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22"+locale+"%22)&format=json";
+    }
+   YahooApi.yApi = function(query, locale){
+    return $http.get(yurl(query, locale));
   };
 
-  return yApi;
+  return YahooApi;
 
 
 })

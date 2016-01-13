@@ -22,7 +22,7 @@
           <i class="ion-plus-circled"></i> Add Location
         </ion-item>
         <ion-item ng-repeat="location in locations"  ng-class="{active: activeLocation = location}">
-          <button class="button button-stable" ng-click="goToLocation(location.zip);" menu-toggle="left">{{location.name}}</button> 
+          <button class="button button-stable" ng-click="goToLocation(location.name);" menu-toggle="left">{{location.name}}</button> 
           <button class="button button-icon" style="float:right" ng-click="deleteLocation(location.zip)">
             <i class="icon ion-trash-b"></i>
           </button>

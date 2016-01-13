@@ -1,6 +1,10 @@
 <ion-view view-title="forecast" cache-view="false" ng-controller="forecast">
   <ion-content >
-    <h1>forecast for: <br> {{city.city.name}}</h1>
-    <h3>time: {{time | date:'MM/dd/yyyy'}}</h3>
+<!--     <h1>forecast for: <br> {{weatherInfo.location.city}}, {{weatherInfo.location.region}}</h1>
+ -->
+	<br>
+ 	<h1>{{weatherInfo.item.title}}</h1>
+ 	<br>
+	<div ng-bind-html="weatherInfo.item.description"></div>
   </ion-content>
 </ion-view>

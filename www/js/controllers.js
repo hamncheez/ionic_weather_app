@@ -68,8 +68,9 @@ angular.module('weather.controllers', [])
 
   $scope.locations = Locations.all();
 
-  $scope.deleteLocation = function(location){
-      var index = Locations.getLocationIndex($scope.locations, 'zip', location);
+  $scope.deleteLocation = function(city, state){
+
+      var index = Locations.getLocationIndex($scope.locations, 'state', city+", "+state);
       if (index >-1){
         $scope.locations.splice(index, 1);
       }
@@ -84,16 +85,18 @@ angular.module('weather.controllers', [])
     } 
   };
 
-  $scope.locations = Locations.all();
-  $scope.activeLocation = Locations.getActiveLocation();
+  //$scope.locations = Locations.all();
+ // $scope.activeLocation = Locations.getActiveLocation();
 
-  $scope.goToLocation = function(zipId){
-    if(zipId){
-      var index = {name : Locations.getNamebyZip($scope.locations, 'zip', zipId), zip: zipId};
-    }
-    else{
-      var index = {name : $scope.locationInfo.city.name, zip : $scope.searchInfo.zip};
-    }
+  $scope.goToLocation = function(name){
+    //if(name){
+      var index = name;
+      //var index = {name : Locations.getNamebyZip($scope.locations, 'zip', zipId), zip: zipId};
+
+  //  }
+   // else{
+   //   var index = {name : $scope.locationInfo.city.name, zip : $scope.searchInfo.query};
+  //  }
 
     Locations.setActiveLocation(index);
     $state.go('app.view', {}, {reload:true});
@@ -106,8 +109,8 @@ angular.module('weather.controllers', [])
       $scope.locations = [];
     }
 
-    var newLocation = Locations.newLocation($scope.locationInfo.city.name, $scope.searchInfo.zip);
-    var ifExists = Locations.checkIfExists($scope.locations, newLocation.zip);
+    var newLocation = Locations.newLocation($scope.locationInfo.city+", "+$scope.locationInfo.region);
+    var ifExists = Locations.checkIfExists($scope.locations, newLocation);
     if(ifExists == true){
       alert("Already saved!"); 
     }
@@ -117,19 +120,12 @@ angular.module('weather.controllers', [])
     }
 
 
-    $scope.goToLocation();
+    $scope.goToLocation(newLocation.name);
   }
 
   $scope.findZip = function(){
-  // var owmUrl = "http://api.openweathermap.org/data/2.5/forecast";
-/*
-    $http({
-      method:'GET',
-      url: owmUrl,
-      params: {zip:$scope.searchInfo.zip}
-    })*/
 
-    OwmApi.getZip($scope.searchInfo.zip)
+  /*  OwmApi.getZip($scope.searchInfo.zip)
 
     .then(function(response){
       $scope.locationInfo = response.data;
@@ -151,19 +147,62 @@ angular.module('weather.controllers', [])
       }
     }, function(){
       alert('no go');
-    });
+    });*/
+
+
+    YahooApi.yApi('location', $scope.searchInfo.query)
+      .then(function(response){
+        if(response.data.query.results == null){
+          $scope.error = "Can't seem to find that!";
+          console.log($scope.error);
+        }
+        else if(response.data.query.results.channel.location){
+          $scope.error = false;
+          $scope.locationInfo = response.data.query.results.channel.location;
+          console.log(JSON.stringify($scope.locationInfo));
+
+          var workaround = 1;
+          $scope.$watch('searchInfo.query', function(){
+            workaround --;
+            if(workaround < 0){
+              reset();
+            }
+          });
+        }
+      }, function(){
+      alert('ERROR! No internet connection(probably, what do I know)');
+
+      })
 
   };
 
- $scope.active = Locations.getActiveLocation();
-  console.log($scope.active);
+ //$scope.active = Locations.getActiveLocation();
+  //console.log($scope.active);
  
 
 })
-.controller('forecast', function($scope, $state,  Locations, OwmApi){
+.controller('forecast', function($scope, $state,  Locations, YahooApi){
+      var active = Locations.getActiveLocation();
+      YahooApi.yApi('*', active)
+        .then(function(response){
+          if(response.data.query.results == null){
+            $scope.error = "Can't seem to find that!";
+            console.log($scope.error);
+          }
+          else if(response.data.query.results.channel.location){
+            $scope.weatherInfo = response.data.query.results.channel;
+
+          }
+        }, function(){
+        alert('ERROR! No internet connection(probably, what do I know)');
+
+        })
 
 
-  OwmApi.getZip(Locations.getActiveLocation().zip)
+
+
+
+ /* OwmApi.getZip(Locations.getActiveLocation().zip)
     .then(function(response){
       $scope.city = response.data;
       $scope.time = ($scope.city.list[0].dt)*1000;
@@ -176,11 +215,18 @@ angular.module('weather.controllers', [])
       }
     }, function(){
       console.log('Check yo internet connection, homie')
-    });
+    });*/
 })
 .controller('testCtrl', function($scope, YahooApi){
-    YahooApi.yApi('location','provo, utah').then(function(response){
-      console.log(response.data);
+    YahooApi.yApi('location','nome').then(function(response){
+      console.log('json return:'+JSON.stringify(response.data));
+      if(response.data.query.results == null) {
+        console.log('cant find');
+      }
+      else{
+       console.log('test: '+response.data.query.results.channel.location.city);
+      }
+
     }, function(){
       console.log('didnt connect');
     });

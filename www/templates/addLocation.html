@@ -8,26 +8,27 @@
 	<ion-content has-subheader="false">
 		<form name="form" ng-submit="findZip()">
 			<label for="zip" class="item item-input">
-				<span class="input-label">Zip:</span>
-				<input type="text" name="zip" pattern="[0-9]*" ng-model="searchInfo.zip" ng-pattern="/^(\d{5}-\d{4}|\d{5})$/" placeholder="example: 90210" >
+				<span class="input-label">City:</span>
+				<input type="text" name="zip" ng-model="searchInfo.query" placeholder="example: 90210 or Seattle" >
 			</label>		
-				<div class="row row-center" ng-show="locationInfo.city.name || error">
-					<div class="col" ng-class="{assertive: error}">
-						{{locationInfo.city.name}}
-						<p ng-show="error">{{error}}</p>
-					</div>
-					<div class="col" ng-hide="error">
-						<button class="button button-positive" type="submit" ng-click="saveLocation()">Save</button>
-					</div>
-					<div class="col" ng-hide="error">
-						<button class="button button-calm" type="submit" ng-click="goToLocation()">Just look</button>
-					</div>
-				</div>
+				
 
 			<label class="item">
-				<button class="button button-block button-positive" type="submit" ng-hide="form.zip.$error.pattern || locationInfo.city.name">Lookup Zip Code</button>
+				<button class="button button-block button-positive" type="submit" ng-hide="locationInfo.city">Lookup City</button>
 			</label>
 		</form>
+		<div class="row row-center" ng-show="locationInfo.city || error">
+			<div class="col" ng-class="{assertive: error}">
+				{{locationInfo.city}}, {{locationInfo.region}}
+				<p ng-show="error">{{error}}</p>
+			</div>
+			<div class="col" ng-hide="error">
+				<button class="button button-positive" ng-click="saveLocation()">Save</button>
+			</div>
+			<div class="col" ng-hide="error">
+				<button class="button button-calm" ng-click="goToLocation()">Just look</button>
+			</div>
+		</div>
 <!-- 		<p class="muted">error code: {{locationInfo.cod}}</p> -->
 	</ion-content>
 <style>
