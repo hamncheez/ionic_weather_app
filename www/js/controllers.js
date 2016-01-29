@@ -68,9 +68,9 @@ angular.module('weather.controllers', [])
 
   $scope.locations = Locations.all();
 
-  $scope.deleteLocation = function(city, state){
+  $scope.deleteLocation = function(name){
 
-      var index = Locations.getLocationIndex($scope.locations, 'state', city+", "+state);
+      var index = Locations.getLocationIndex($scope.locations, 'name', name);
       if (index >-1){
         $scope.locations.splice(index, 1);
       }
@@ -125,31 +125,6 @@ angular.module('weather.controllers', [])
 
   $scope.findZip = function(){
 
-  /*  OwmApi.getZip($scope.searchInfo.zip)
-
-    .then(function(response){
-      $scope.locationInfo = response.data;
-      if($scope.locationInfo.cod == "404"){
-        $scope.error = "Can't find that zip code!";
-        console.log($scope.error);
-      }
-      else if ($scope.locationInfo.cod = "200"){
-        $scope.error = false;
-
-        var workaround = 1;
-        $scope.$watch('searchInfo.zip', function(){
-          workaround --;
-          if(workaround < 0){
-            reset();
-          }
-        });
-
-      }
-    }, function(){
-      alert('no go');
-    });*/
-
-
     YahooApi.yApi('location', $scope.searchInfo.query)
       .then(function(response){
         if(response.data.query.results == null){
@@ -183,6 +158,7 @@ angular.module('weather.controllers', [])
 })
 .controller('forecast', function($scope, $state,  Locations, YahooApi){
       var active = Locations.getActiveLocation();
+      $scope.weatherInfo = {};
       YahooApi.yApi('*', active)
         .then(function(response){
           if(response.data.query.results == null){
@@ -191,32 +167,20 @@ angular.module('weather.controllers', [])
           }
           else if(response.data.query.results.channel.location){
             $scope.weatherInfo = response.data.query.results.channel;
+            var n = $scope.weatherInfo.item.description.indexOf('<a');
+            $scope.weatherInfo.item.description = $scope.weatherInfo.item.description.substr(0, n);
+            
 
           }
         }, function(){
         alert('ERROR! No internet connection(probably, what do I know)');
-
-        })
-
+        });
 
 
-
-
- /* OwmApi.getZip(Locations.getActiveLocation().zip)
-    .then(function(response){
-      $scope.city = response.data;
-      $scope.time = ($scope.city.list[0].dt)*1000;
-      console.log($scope.city);
-      if($scope.city.cod =+ "404"){
-        $scope.error = "Something broke. Can't find the zip code for that city!"
-      }
-      else if ($scope.city.cod == "200"){
-        $scope.error = false;
-      }
-    }, function(){
-      console.log('Check yo internet connection, homie')
-    });*/
 })
+
+
+
 .controller('testCtrl', function($scope, YahooApi){
     YahooApi.yApi('location','nome').then(function(response){
       console.log('json return:'+JSON.stringify(response.data));
