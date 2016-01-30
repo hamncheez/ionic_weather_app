@@ -4,9 +4,21 @@
 		<div class="item item-divider">
  			<h3>{{weatherInfo.item.title}}</h3>
 		</div>
-		<div class="item item-text-wrap" ng-bind-html="weatherInfo.item.description">
-			
+		<div class="item item-text-wrap" >
+			<div ng-bind-html="weatherInfo.item.description"></div>
+			<div ng-show="more">
+				Wind Chill: {{weatherInfo.wind.chill}} <br>
+				Sunrise: {{weatherInfo.astronomy.sunrise}} <br>
+				Sunset: {{weatherInfo.astronomy.sunset}} <br>
+				Humidity: {{weatherInfo.atmosphere.humidity}} <br>
+				Pressure: {{weatherInfo.atmosphere.pressure}} <br>
+				visibility: {{weatherInfo.atmosphere.visibility}} <br>
+			</div>
 		</div>
+
+		<a href="#" class="item item-divider" style="text-align:center" ng-click="showMore()">
+			{{moreText}}
+		</a>
 	</div>
  	<br>
 	<div ></div>

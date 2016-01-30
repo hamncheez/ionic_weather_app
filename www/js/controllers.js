@@ -168,14 +168,25 @@ angular.module('weather.controllers', [])
           else if(response.data.query.results.channel.location){
             $scope.weatherInfo = response.data.query.results.channel;
             var n = $scope.weatherInfo.item.description.indexOf('<a');
-            $scope.weatherInfo.item.description = $scope.weatherInfo.item.description.substr(0, n);
+            $scope.weatherInfo.item.description = $scope.weatherInfo.item.description.substr(0, n); //gets rid of extra info
             
 
           }
         }, function(){
         alert('ERROR! No internet connection(probably, what do I know)');
         });
-
+      $scope.more = false;
+      $scope.moreText = 'Show More';
+      $scope.showMore = function(){
+        if($scope.more == false){
+          $scope.more = true;
+          $scope.moreText = "Show Less";
+        }
+        else{
+          $scope.more = false;
+          $scope.moreText = "Show More";
+        }
+      }
 
 })
 
