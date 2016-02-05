@@ -5,20 +5,32 @@
  			<h3>{{weatherInfo.item.title}}</h3>
 		</div>
 		<div class="item item-text-wrap" >
-			<div ng-bind-html="weatherInfo.item.description"></div>
-			<div ng-show="more">
-				Wind Chill: {{weatherInfo.wind.chill}} <br>
-				Sunrise: {{weatherInfo.astronomy.sunrise}} <br>
-				Sunset: {{weatherInfo.astronomy.sunset}} <br>
-				Humidity: {{weatherInfo.atmosphere.humidity}} <br>
-				Pressure: {{weatherInfo.atmosphere.pressure}} <br>
-				visibility: {{weatherInfo.atmosphere.visibility}} <br>
-			</div>
+			<div ng-bind-html="currentConditions"></div>
+			Wind Chill: {{weatherInfo.wind.chill}} <br>
+			Sunrise: {{weatherInfo.astronomy.sunrise}} <br>
+			Sunset: {{weatherInfo.astronomy.sunset}} <br>
+			Humidity: {{weatherInfo.atmosphere.humidity}} <br>
+			Pressure: {{weatherInfo.atmosphere.pressure}} <br>
+			visibility: {{weatherInfo.atmosphere.visibility}} <br>
+			<br>
+			<div ng-show="more" ng-bind-html="summary"></div>
 		</div>
 
 		<a href="#" class="item item-divider" style="text-align:center" ng-click="showMore()">
 			{{moreText}}
 		</a>
+	</div>
+	<div class="card" ng-repeat="forecast in weatherInfo.item.forecast">
+		<div class="item item-divider">
+			<h3>{{forecast.day}} <span ng-if="$index == 0">(Today)</span></h3>
+		</div>
+		<div class="item item-text-wrap">
+			<img ng-src="http://l.yimg.com/a/i/us/we/52/{{forecast.code}}.gif" alt="">
+			<p>{{forecast.date}}</p>
+			<p>{{forecast.text}}</p>
+			<p>High: {{forecast.high}} {{weatherInfo.units.temperature}}</p>
+			<p>Low: {{forecast.low}} {{weatherInfo.units.temperature}}</p>
+		</div>
 	</div>
  	<br>
 	<div ></div>

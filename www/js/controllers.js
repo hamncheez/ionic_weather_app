@@ -167,24 +167,25 @@ angular.module('weather.controllers', [])
           }
           else if(response.data.query.results.channel.location){
             $scope.weatherInfo = response.data.query.results.channel;
-            var n = $scope.weatherInfo.item.description.indexOf('<a');
-            $scope.weatherInfo.item.description = $scope.weatherInfo.item.description.substr(0, n); //gets rid of extra info
-            
-
+            var n = $scope.weatherInfo.item.description.indexOf('<b>Forecast:</b>');
+            var m = $scope.weatherInfo.item.description.indexOf('<a');
+            m = m-n; //gets rid of extra info
+            $scope.currentConditions = $scope.weatherInfo.item.description.substr(0, n); //parses info
+            $scope.summary = $scope.weatherInfo.item.description.substr(n, m); //gets rid of extra info
           }
         }, function(){
         alert('ERROR! No internet connection(probably, what do I know)');
         });
       $scope.more = false;
-      $scope.moreText = 'Show More';
+      $scope.moreText = 'Show Summary';
       $scope.showMore = function(){
         if($scope.more == false){
           $scope.more = true;
-          $scope.moreText = "Show Less";
+          $scope.moreText = "Hide Summary";
         }
         else{
           $scope.more = false;
-          $scope.moreText = "Show More";
+          $scope.moreText = "Show Summary";
         }
       }
 
