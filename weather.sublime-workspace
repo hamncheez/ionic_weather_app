@@ -11,18 +11,47 @@
 			"file": "www/js/app.js",
 			"settings":
 			{
-				"buffer_size": 3642,
+				"buffer_size": 3899,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"contents": "angular.module('weather.controllers', [])\n\n.controller('AppCtrl', function($scope, $ionicModal) {\n\n  // With the new view caching in Ionic, Controllers are only called\n  // when they are recreated or on app start, instead of every page change.\n  // To listen for when this page is active (for example, to refresh data),\n  // listen for the $ionicView.enter event:\n  //$scope.$on('$ionicView.enter', function(e) {\n  //});\n\n  //addLocation modal\n/*  $ionicModal.fromTemplateUrl('templates/addLocation.html', {\n    id: '0',\n    scope: $scope,\n    animation: 'slide-in-up'\n  }).then(function(modal){\n    $scope.addLocationModal = modal;\n  });\n*/\n\n  // Triggered in the login modal to close it\n/*  $scope.closeModal = function() {\n      $scope.addLocationModal.hide();\n  };\n\n\n  $scope.addModal = function(){\n      $scope.addLocationModal.show();\n  };\n*/\n\n\n\n})\n\n\n.controller('GetLocationCtrl', function($scope, $ionicModal, $http, $state,  Locations, OwmApi, YahooApi){\n\n    //addLocation modal\n    $ionicModal.fromTemplateUrl('templates/addLocation.html', {\n      id: '0',\n      scope: $scope,\n      animation: 'slide-in-up'\n    }).then(function(modal){\n      $scope.addLocationModal = modal;\n    });\n\n\n\n\n  $scope.locationInfo = {};\n  $scope.searchInfo = {};\n\n  // $ionicModal.fromTemplateUrl('templates/addLocation.html', function(modal){\n  //   $scope.addLocationModal = modal;\n  // });\n\n  $scope.closeModal = function() {\n      $scope.addLocationModal.hide();\n  };\n\n\n  $scope.addModal = function(){\n      $scope.addLocationModal.show();\n  };\n\n\n  $scope.locations = Locations.all();\n\n  $scope.deleteLocation = function(location){\n      var index = Locations.getLocationIndex($scope.locations, 'zip', location);\n      if (index >-1){\n        $scope.locations.splice(index, 1);\n      }\n      console.log($scope.locations);\n      Locations.save($scope.locations);\n\n  };\n\n  var reset = function(){\n    if($scope.locationInfo){\n      $scope.locationInfo = null;\n    } \n  };\n\n  $scope.locations = Locations.all();\n  $scope.activeLocation = Locations.getActiveLocation();\n\n  $scope.goToLocation = function(zipId){\n    if(zipId){\n      var index = {name : Locations.getNamebyZip($scope.locations, 'zip', zipId), zip: zipId};\n    }\n    else{\n      var index = {name : $scope.locationInfo.city.name, zip : $scope.searchInfo.zip};\n    }\n\n    Locations.setActiveLocation(index);\n    $state.go('app.view', {}, {reload:true});\n    $scope.closeModal();\n     \n  };\n\n  $scope.saveLocation = function(){\n    if($scope.locations == null){\n      $scope.locations = [];\n    }\n\n    var newLocation = Locations.newLocation($scope.locationInfo.city.name, $scope.searchInfo.zip);\n    var ifExists = Locations.checkIfExists($scope.locations, newLocation.zip);\n    if(ifExists == true){\n      alert(\"Already saved!\"); \n    }\n    else{\n      $scope.locations.push(newLocation);\n      Locations.save($scope.locations);\n    }\n\n\n    $scope.goToLocation();\n  }\n\n  $scope.findZip = function(){\n\n    OwmApi.getZip($scope.searchInfo.zip)\n\n    .then(function(response){\n      $scope.locationInfo = response.data;\n      if($scope.locationInfo.cod == \"404\"){\n        $scope.error = \"Can't find that zip code!\";\n        console.log($scope.error);\n      }\n      else if ($scope.locationInfo.cod = \"200\"){\n        $scope.error = false;\n\n        var workaround = 1;\n        $scope.$watch('searchInfo.zip', function(){\n          workaround --;\n          if(workaround < 0){\n            reset();\n          }\n        });\n\n      }\n    }, function(){\n      alert('no go');\n    });\n\n  };\n\n $scope.active = Locations.getActiveLocation();\n  console.log($scope.active);\n \n\n})\n.controller('forecast', function($scope, $state,  Locations, OwmApi){\n\n\n  OwmApi.getZip(Locations.getActiveLocation().zip)\n    .then(function(response){\n      $scope.city = response.data;\n      $scope.time = ($scope.city.list[0].dt)*1000;\n      console.log($scope.city);\n      if($scope.city.cod =+ \"404\"){\n        $scope.error = \"Something broke. Can't find the zip code for that city!\"\n      }\n      else if ($scope.city.cod == \"200\"){\n        $scope.error = false;\n      }\n    }, function(){\n      console.log('Check yo internet connection, homie')\n    });\n})\n.controller('testCtrl', function($scope, YahooApi){\n    YahooApi.yApi('location','provo').then(function(response){\n      console.log('json return:'+JSON.stringify(response.data));\n\n      console.log('test: '+response.data.query.results.channel.location.city);\n    }, function(){\n      console.log('didnt connect');\n    });\n\n})\n;\n\n\n",
-			"file": "www/js/controllers.js",
-			"file_size": 4876,
-			"file_write_time": 130965936086635645,
+			"file": "www/templates/addLocation.html",
 			"settings":
 			{
-				"buffer_size": 4516,
+				"buffer_size": 1310,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "www/templates/menu.html",
+			"settings":
+			{
+				"buffer_size": 1709,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "www/templates/forecastView.html",
+			"settings":
+			{
+				"buffer_size": 1340,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "www/css/style.css",
+			"settings":
+			{
+				"buffer_size": 265,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "www/js/controllers.js",
+			"settings":
+			{
+				"buffer_size": 5702,
 				"line_ending": "Windows"
 			}
 		},
@@ -42,12 +71,16 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 392.0,
-		"last_filter": "",
+		"height": 104.0,
+		"last_filter": "install",
 		"selected_items":
 		[
+			[
+				"install",
+				"Package Control: Install Package"
+			]
 		],
-		"width": 416.0
+		"width": 400.0
 	},
 	"console":
 	{
@@ -70,11 +103,18 @@
 	[
 		"/C/xampp/htdocs/www/weather",
 		"/C/xampp/htdocs/www/weather/www",
+		"/C/xampp/htdocs/www/weather/www/css",
 		"/C/xampp/htdocs/www/weather/www/js",
 		"/C/xampp/htdocs/www/weather/www/templates"
 	],
 	"file_history":
 	[
+		"/C/Windows/System32/drivers/etc/hosts",
+		"/C/Users/Ivan/AppData/Local/Temp/BvSshSftp/Bv0030ef/Bv003ccf/wp-config.php",
+		"/C/Users/Ivan/AppData/Local/Temp/BvSshSftp/Bv0030ef/Bv003995/wp-config.php",
+		"/C/Users/Ivan/Documents/key/new/kealii-private.ppk",
+		"/C/Users/Ivan/Desktop/www/links/.htaccess",
+		"/C/Users/Ivan/Documents/key/new/kealii-private.pem",
 		"/C/xampp/apache/conf/httpd.conf",
 		"/D/Users/Ivan/www/weather/weather/www/js/controllers.js",
 		"/D/Users/Ivan/www/weather/weather/www/js/app.js",
@@ -82,7 +122,6 @@
 		"/C/xampp/htdocs/www/weather/www/js/app.js",
 		"/C/xampp/htdocs/www/weather/package.json",
 		"/C/xampp/htdocs/www/weather/ionic.project",
-		"/C/Windows/System32/drivers/etc/hosts",
 		"/C/xampp/htdocs/www/magestack/.htaccess"
 	],
 	"find":
@@ -101,6 +140,13 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"undefined",
+			"$location",
+			"setActive",
+			"searchInfo.zip",
+			"$scope.locationInfo",
+			"$scope.location",
+			"OwmApi",
 			"yahoo",
 			"yApi",
 			"echo $this->__('Your order # is",
@@ -114,6 +160,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"searchInfo.query"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -124,7 +171,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -133,15 +180,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3642,
+						"buffer_size": 3899,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3642,
-								3642
+								1604,
+								1604
 							]
 						],
 						"settings":
@@ -151,10 +198,125 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1080.0,
+						"translation.y": 615.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "www/templates/addLocation.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1310,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1310,
+								1310
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "www/templates/menu.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1709,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1517,
+								1517
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "www/templates/forecastView.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1340,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1340,
+								1340
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "www/css/style.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 265,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								263,
+								263
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
 					"type": "text"
 				}
 			]
@@ -164,20 +326,20 @@
 			"sheets":
 			[
 				{
-					"buffer": 1,
+					"buffer": 5,
 					"file": "www/js/controllers.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4516,
+						"buffer_size": 5702,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2958,
-								2958
+								3794,
+								3794
 							]
 						],
 						"settings":
@@ -187,14 +349,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 395.0,
+						"translation.y": 1747.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 6,
 					"file": "www/templates/test.html",
 					"semi_transient": false,
 					"settings":
@@ -212,13 +374,13 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/HTML/HTML.tmLanguage"
+							"syntax": "Packages/HTML/HTML.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 6,
 					"type": "text"
 				}
 			]
@@ -252,7 +414,7 @@
 		"cols":
 		[
 			0.0,
-			0.432114882507,
+			0.483677382507,
 			1.0
 		],
 		"rows":
@@ -270,7 +432,7 @@
 	"project": "weather.sublime-project",
 	"replace":
 	{
-		"height": 42.0
+		"height": 62.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -308,14 +470,14 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 0,
+	"selected_group": 1,
 	"settings":
 	{
 	},
 	"show_minimap": false,
 	"show_open_files": false,
 	"show_tabs": true,
-	"side_bar_visible": false,
+	"side_bar_visible": true,
 	"side_bar_width": 236.0,
 	"status_bar_visible": true,
 	"template_settings":

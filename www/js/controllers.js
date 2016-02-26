@@ -35,7 +35,7 @@ angular.module('weather.controllers', [])
 })
 
 
-.controller('GetLocationCtrl', function($scope, $ionicModal, $http, $state,  Locations, OwmApi, YahooApi){
+.controller('GetLocationCtrl', function($scope, $ionicModal, $ionicLoading, $http, $state,  Locations, YahooApi){
 
     //addLocation modal
     $ionicModal.fromTemplateUrl('templates/addLocation.html', {
@@ -89,18 +89,17 @@ angular.module('weather.controllers', [])
  // $scope.activeLocation = Locations.getActiveLocation();
 
   $scope.goToLocation = function(name){
-    //if(name){
-      var index = name;
-      //var index = {name : Locations.getNamebyZip($scope.locations, 'zip', zipId), zip: zipId};
 
-  //  }
-   // else{
-   //   var index = {name : $scope.locationInfo.city.name, zip : $scope.searchInfo.query};
-  //  }
+    var index = name;
+
+    if(index == null){
+      index = $scope.locationInfo.city+", "+$scope.locationInfo.region;
+    }
 
     Locations.setActiveLocation(index);
     $state.go('app.view', {}, {reload:true});
     $scope.closeModal();
+    console.log("location that should be active: "+index);
      
   };
 
@@ -124,14 +123,18 @@ angular.module('weather.controllers', [])
   }
 
   $scope.findZip = function(){
-
+     $ionicLoading.show({
+          template:'Looking up...'
+        });
     YahooApi.yApi('location', $scope.searchInfo.query)
       .then(function(response){
         if(response.data.query.results == null){
-          $scope.error = "Can't seem to find that!";
+          $scope.error = "Can't seem to find that! Try something else?";
           console.log($scope.error);
+          $ionicLoading.hide();
         }
         else if(response.data.query.results.channel.location){
+          $ionicLoading.hide();
           $scope.error = false;
           $scope.locationInfo = response.data.query.results.channel.location;
           console.log(JSON.stringify($scope.locationInfo));
@@ -146,6 +149,7 @@ angular.module('weather.controllers', [])
         }
       }, function(){
       alert('ERROR! No internet connection(probably, what do I know)');
+      $ionicLoading.hide();
 
       })
 
@@ -156,26 +160,59 @@ angular.module('weather.controllers', [])
  
 
 })
-.controller('forecast', function($scope, $state,  Locations, YahooApi){
-      var active = Locations.getActiveLocation();
-      $scope.weatherInfo = {};
-      YahooApi.yApi('*', active)
-        .then(function(response){
-          if(response.data.query.results == null){
-            $scope.error = "Can't seem to find that!";
-            console.log($scope.error);
-          }
-          else if(response.data.query.results.channel.location){
-            $scope.weatherInfo = response.data.query.results.channel;
-            var n = $scope.weatherInfo.item.description.indexOf('<b>Forecast:</b>');
-            var m = $scope.weatherInfo.item.description.indexOf('<a');
-            m = m-n; //gets rid of extra info
-            $scope.currentConditions = $scope.weatherInfo.item.description.substr(0, n); //parses info
-            $scope.summary = $scope.weatherInfo.item.description.substr(n, m); //gets rid of extra info
-          }
-        }, function(){
-        alert('ERROR! No internet connection(probably, what do I know)');
+.controller('forecast', function($scope, $state,  Locations, YahooApi, $ionicLoading){
+
+      $scope.display = false;
+
+      $scope.show = function(){
+        $ionicLoading.show({
+          template:'Getting Forecast...'
         });
+      };
+      $scope.hide = function(){
+        $ionicLoading.hide();
+
+      }
+
+      var active = Locations.getActiveLocation();
+
+      $scope.weatherInfo = {};
+
+      var getForcast = function(){
+
+        $scope.show();
+
+        YahooApi.yApi('*', active)
+          .then(function(response){
+            if(response.data.query.results == null){
+              $scope.error = "Can't seem to find that city! Try something else, I guess";
+              alert($scope.error);
+              $scope.hide();
+            }
+            else if(response.data.query.results.channel.location){
+              $scope.weatherInfo = response.data.query.results.channel;
+              var n = $scope.weatherInfo.item.description.indexOf('<b>Forecast:</b>');
+              var m = $scope.weatherInfo.item.description.indexOf('<a');
+              m = m-n; //gets rid of extra info
+              $scope.currentConditions = $scope.weatherInfo.item.description.substr(0, n); //parses info
+              $scope.summary = $scope.weatherInfo.item.description.substr(n, m); //gets rid of extra info
+              $scope.display = true; //shows cards when data is populated
+              $scope.hide(); //hides loading gif
+            }
+          }, function(){
+          alert('ERROR! No internet connection(probably, what do I know)');
+          });
+
+      }
+
+      getForcast();
+
+      $scope.doRefresh = function(){
+        getForcast();
+        $scope.$broadcast('scroll.refreshComplete');
+      }
+
+      
       $scope.more = false;
       $scope.moreText = 'Show Summary';
       $scope.showMore = function(){
